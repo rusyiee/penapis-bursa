@@ -4,42 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Penapis Saham Bursa</title>
+<script>(function(){var t="light";try{t=localStorage.getItem("pb_theme")||"light";}catch(e){}document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
 <meta name="description" content="Saringan teknikal harian saham Bursa Malaysia: volum, momentum, RSI dan Bollinger breakout. Data dikemas kini automatik setiap petang hari bekerja.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#EDF1EF;--surface:#FFFFFF;--ink:#10302A;--muted:#5A6F69;--line:#D2DCD8;
-  --jade:#0A7A5A;--jade-ink:#FFFFFF;--jade-soft:#DDF1E9;--amber:#9A6210;--amber-soft:#F6EAD2;
-  --rust:#A3433A;--rust-soft:#F6E1DE;--seg:#D8E1DE;--focus:#1F6FD1;
+  /* Penapis Bursa: hijau jed pasaran di atas latar cerah; gelap ialah set token sendiri */
+  --bg:#F7FAF9;--surface:#FFFFFF;--ink:#0B241F;--muted:#475B55;--line:#D7E2DE;
+  --jade:#08785A;--jade-ink:#FFFFFF;--jade-soft:#DEF4EB;--amber:#8A560A;--amber-soft:#FBEFD6;
+  --rust:#A13A31;--rust-soft:#FBE4E0;--seg:#E2EAE7;--focus:#1F6FD1;
   color-scheme:light;box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0E1916;--surface:#15221E;--ink:#E4EEEA;--muted:#93A7A1;--line:#26352F;
-    --jade:#3FC59B;--jade-ink:#06231A;--jade-soft:#123A2F;--amber:#E2A64B;--amber-soft:#3A2C12;
-    --rust:#E57E73;--rust-soft:#3D1F1C;--seg:#24342E;--focus:#7FB2F0;color-scheme:dark;
+  --bg:#17241F;--surface:#1F2E29;--ink:#F3F8F6;--muted:#B7C8C2;--line:#36493F;
+  --jade:#4FD3A8;--jade-ink:#062019;--jade-soft:#1C4538;--amber:#F0B860;--amber-soft:#44341A;
+  --rust:#F28B80;--rust-soft:#4A2622;--seg:#2F413A;--focus:#8DBBF3;color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0E1916;--surface:#15221E;--ink:#E4EEEA;--muted:#93A7A1;--line:#26352F;
-  --jade:#3FC59B;--jade-ink:#06231A;--jade-soft:#123A2F;--amber:#E2A64B;--amber-soft:#3A2C12;
-  --rust:#E57E73;--rust-soft:#3D1F1C;--seg:#24342E;--focus:#7FB2F0;color-scheme:dark;
+  --bg:#17241F;--surface:#1F2E29;--ink:#F3F8F6;--muted:#B7C8C2;--line:#36493F;
+  --jade:#4FD3A8;--jade-ink:#062019;--jade-soft:#1C4538;--amber:#F0B860;--amber-soft:#44341A;
+  --rust:#F28B80;--rust-soft:#4A2622;--seg:#2F413A;--focus:#8DBBF3;color-scheme:dark;
 }
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px);}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);}
 .wrap{max-width:760px;margin:0 auto;padding:0 16px;}
-.num{font-variant-numeric:tabular-nums;}
+.num{font-variant-numeric:normal;}
 button,input,select,textarea{font:inherit;color:inherit;}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);}
 .brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:14px;flex-wrap:wrap;}
 .brand h1{margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em;}
 .brand p{margin:0;font-size:13px;color:var(--muted);}
+.brand{align-items:center;}
+.brand-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.theme{display:inline-flex;background:var(--seg);border-radius:999px;padding:2px;gap:2px;}
+.theme button{display:inline-flex;align-items:center;gap:5px;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;cursor:pointer;}
+.theme button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);}
+.notice{display:flex;gap:12px;align-items:flex-start;background:var(--amber-soft);border-radius:12px;padding:14px 16px;margin:0 0 20px;}
+.notice svg{flex:none;color:var(--amber);margin-top:2px;}
+.notice h2{margin:0 0 4px;font-size:16px;font-weight:700;}
+.notice p{margin:0;font-size:15px;line-height:1.55;color:var(--ink);}
 .tabs{display:flex;gap:4px;margin-top:8px;overflow-x:auto;}
 .tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 10px 9px;font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;}
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);}
@@ -54,7 +65,7 @@ main{padding:20px 0 48px;}
 .seg button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);}
 .search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:8px;}
-.legend{font-size:12px;color:var(--muted);margin:0 0 12px;}
+.legend{font-size:13px;color:var(--muted);margin:0 0 12px;}
 .list{display:flex;flex-direction:column;gap:8px;}
 .row{background:var(--surface);border:1px solid var(--line);border-radius:12px;}
 .row summary{list-style:none;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 12px 12px 14px;cursor:pointer;}
@@ -105,7 +116,7 @@ h2.vh{font-size:13px;font-weight:500;color:var(--muted);text-transform:uppercase
 .vcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0;}
 .vcard h3{margin:0;font-size:15px;font-weight:700;}
 .vcard .sub{margin:2px 0 12px;font-size:12px;color:var(--muted);}
-.fun,.mv{display:grid;gap:7px 10px;align-items:center;font-size:13px;}
+.fun,.mv{display:grid;gap:8px 10px;align-items:center;font-size:14px;}
 .fun{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;}
 .mv{grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;}
 .fun .lb,.mv .lb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -122,7 +133,7 @@ h2.vh{font-size:13px;font-weight:500;color:var(--muted);text-transform:uppercase
 .mvhead{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:-4px 0 6px;}
 .chart{position:relative;margin:2px 0 12px;}
 .chart svg{display:block;width:100%;height:auto;touch-action:pan-y;}
-.chart .ax{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums;}
+.chart .ax{font-size:11px;fill:var(--muted);}
 .chart .gl{stroke:var(--line);stroke-width:1;}
 .chart .band{fill:var(--jade-soft);}
 .chart .bl{fill:none;stroke:var(--jade);stroke-width:1;}
@@ -158,7 +169,7 @@ h2.vh{font-size:13px;font-weight:500;color:var(--muted);text-transform:uppercase
 .card-f{display:flex;justify-content:flex-end;margin-top:10px;}
 h2.sec{font-size:18px;margin:28px 0 8px;font-weight:700;}
 h2.sec:first-child{margin-top:0;}
-.panel p.lead{margin:0 0 12px;color:var(--muted);font-size:14px;max-width:62ch;}
+.panel p.lead{margin:0 0 12px;color:var(--muted);font-size:15px;max-width:62ch;}
 textarea{width:100%;min-height:150px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;line-height:1.5;resize:vertical;}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center;}
 .file{position:relative;overflow:hidden;}
@@ -199,7 +210,7 @@ pre.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10p
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="brand"><h1>Penapis Bursa</h1><p id="saveStatus">Memuatkan…</p></div>
+    <div class="brand"><h1>Penapis Bursa</h1><div class="brand-r"><p id="saveStatus">Memuatkan…</p><div class="theme" role="group" aria-label="Tema paparan"><button type="button" data-act="theme" data-val="light" aria-pressed="true"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M3 13l1.1-1.1M11.9 4.1 13 3"/></g></svg>Terang</button><button type="button" data-act="theme" data-val="dark" aria-pressed="false"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13.5 10.2A5.8 5.8 0 0 1 5.8 2.5a5.8 5.8 0 1 0 7.7 7.7z" fill="currentColor"/></svg>Gelap</button></div></div></div>
     <nav class="tabs" role="tablist" aria-label="Bahagian">
       <button role="tab" id="t-saringan" data-tab="saringan" aria-controls="saringan">Saringan</button>
       <button role="tab" id="t-pantauan" data-tab="pantauan" aria-controls="pantauan">Pantauan<span class="badge" id="wbadge"></span></button>
@@ -508,11 +519,25 @@ function mergeFeed(f) {
   }
   for (const s in (f.shares || {})) if (f.shares[s] > 0) S.shares[s] = f.shares[s];
 }
+function feedText() {
+  const n = Object.keys(FEED.prices || {}).length;
+  return 'Harga ' + n + ' kaunter ditarik dari Yahoo Finance setiap petang hari bekerja selepas pasaran tutup. Kemas kini terakhir: <strong>' + esc(fmtStamp(FEED.updated)) + '</strong>. Yahoo Finance bukan sumber rasmi Bursa, jadi semak sekali-sekala dengan platform broker.';
+}
+function noticeHTML() {
+  if (!FEED) return '';
+  return '<aside class="notice" aria-labelledby="nt-h"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 5.5v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14.3" r="1.2" fill="currentColor"/></svg>' +
+    '<div><h2 id="nt-h">Data automatik</h2><p>' + feedText() + ' Alat analisis teknikal sahaja, bukan nasihat pelaburan.</p></div></aside>';
+}
+function setTheme(v) {
+  v = v === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', v);
+  LS.set('pb_theme', v);
+  document.querySelectorAll('[data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.val === v)));
+}
 function renderFeedInfo() {
   const el = $('#feedInfo'); if (!el) return;
   if (!FEED) { el.innerHTML = '<p class="lead">Data automatik tidak dapat dimuatkan. Semak sambungan internet dan muat semula halaman.</p>'; return; }
-  const n = Object.keys(FEED.prices || {}).length;
-  el.innerHTML = '<p class="lead">Harga ' + n + ' kaunter ditarik dari Yahoo Finance setiap petang hari bekerja selepas pasaran tutup. Kemas kini terakhir: <strong class="num">' + esc(fmtStamp(FEED.updated)) + '</strong>. Yahoo Finance bukan sumber rasmi Bursa, jadi semak sekali-sekala dengan platform broker.</p>';
+  el.innerHTML = '<p class="lead">' + feedText() + '</p>';
 }
 async function loadFeed() {
   $('#saveStatus').textContent = 'Memuatkan data terkini…';
@@ -704,7 +729,7 @@ function renderSaringan() {
   const emptyMsg = q ? 'Tiada simbol sepadan dengan “' + esc(QUERY.trim()) + '”.' : V === 'lulus' ? 'Tiada saham lulus ' + allWord + ' untuk ' + fmtDate(RES.latest) + '. Semak senarai hampir lulus.' : V === 'hampir' ? 'Tiada saham yang kurang satu penapis sahaja.' : 'Tiada data.';
   el.innerHTML =
     '<div class="hero"><h2 class="num">' + (g.lulus.length ? g.lulus.length + ' saham lulus ' + allWord : 'Tiada saham lulus ' + allWord) + '</h2>' +
-    '<p>Data ' + fmtDate(RES.latest) + '. ' + cur + ' kaunter disaring' + (RES.stale ? ', ' + RES.stale + ' tiada data untuk tarikh ini' : '') + '.</p></div>' +
+    '<p>Data ' + fmtDate(RES.latest) + '. ' + cur + ' kaunter disaring' + (RES.stale ? ', ' + RES.stale + ' tiada data untuk tarikh ini' : '') + '.</p></div>' + noticeHTML() +
     (q ? '' : '<h2 class="vh">Ringkasan pasaran</h2><div class="viz">' + funnelHTML() + moversHTML() + '</div>') +
     '<div class="seg" role="group" aria-label="Senarai">' +
     [['lulus', 'Lulus semua', g.lulus.length], ['hampir', 'Hampir lulus', g.hampir.length], ['semua', 'Semua', g.semua.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
@@ -809,6 +834,7 @@ document.addEventListener('click', e => {
   const t = e.target.closest('[data-act],[data-tab]'); if (!t) return;
   if (t.matches('.tabs button')) { setTab(t.dataset.tab); return; }
   const act = t.dataset.act;
+  if (act === 'theme') { setTheme(t.dataset.val); return; }
   if (act === 'goto') setTab(t.dataset.tab);
   else if (act === 'view') { VIEW = t.dataset.view; LIMIT = 150; renderSaringan(); }
   else if (act === 'more') { LIMIT += 150; renderSaringan(); }
@@ -873,6 +899,7 @@ document.addEventListener('change', e => {
 loadLocal();
 TAB = LS.get('pb_tab') || 'saringan';
 if (!['saringan', 'pantauan', 'data', 'tetapan'].includes(TAB)) TAB = 'saringan';
+setTheme(document.documentElement.getAttribute('data-theme'));
 recompute(); renderAll();
 loadFeed();
 </script>
