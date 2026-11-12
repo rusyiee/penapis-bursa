@@ -45,6 +45,7 @@ except ImportError:
 
 FOLDER = Path(__file__).resolve().parent
 FAIL_SENARAI = FOLDER / "senarai_saham.txt"
+FAIL_KECUALI = FOLDER / "senarai_dikecualikan.txt"  # ETF dan saham keutamaan, untuk makluman
 FAIL_SAHAM = FOLDER / "jumlah_saham.csv"  # simpanan jumlah saham beredar
 FOLDER_OUTPUT = FOLDER / "output"
 FAIL_JSON = FOLDER / "docs" / "data" / "bursa.json"  # data untuk website
@@ -79,6 +80,24 @@ def baca_nama(path):
         if kod and komen.strip():
             nama[kod] = komen.strip()
     return nama
+
+
+def baca_kecuali(path=FAIL_KECUALI):
+    """Kaunter yang tidak ditapis: [{"s": kod, "n": nama, "r": jenis}]."""
+    import re
+    hasil = []
+    if not Path(path).exists():
+        return hasil
+    for baris in Path(path).read_text(encoding="utf-8").splitlines():
+        kod, _, komen = baris.partition("#")
+        kod = kod.strip().upper()
+        if not kod:
+            continue
+        m = re.search(r"\[(\w+)\]\s*$", komen)
+        jenis = m.group(1).lower() if m else "lain"
+        nama = komen[:m.start()].strip() if m else komen.strip()
+        hasil.append({"s": kod, "n": nama, "r": jenis})
+    return hasil
 
 
 def baca_simpanan_saham():
@@ -205,6 +224,9 @@ def kemas_kini_json(harga, saham, senarai, masa, nama=None):
         "prices": prices,
         "shares": {k: saham[k] for k in prices if k in saham},
         "names": {k: (nama or {})[k] for k in prices if k in (nama or {})},
+        # Kaunter yang tiada dalam senarai saringan, untuk makluman pengguna website
+        "missing": [{"s": k, "n": (nama or {}).get(k, ""), "r": "tiada_data"}
+                    for k in senarai if k not in prices] + baca_kecuali(),
     }
     FAIL_JSON.parent.mkdir(parents=True, exist_ok=True)
     FAIL_JSON.write_text(json.dumps(data, separators=(",", ":")), encoding="utf-8")

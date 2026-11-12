@@ -65,6 +65,17 @@ main{padding:20px 0 48px;}
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
 .seg button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.mlist{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;}
+.mrow{display:grid;grid-template-columns:76px 1fr auto;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--line);font-size:14px;}
+.mrow:first-child{border-top:0;}
+.mrow .sym{font-weight:700;}
+.mrow .mn{color:var(--muted);min-width:0;overflow-wrap:anywhere;}
+.mtag{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;}
+.mtag.warn{background:var(--amber-soft);color:var(--amber);border-color:transparent;}
+.mcount{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;font-size:14px;color:var(--muted);}
+.mcount b{color:var(--ink);}
+.notice .linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer;font-weight:600;}
+@media (max-width:520px){.mrow{grid-template-columns:64px 1fr;}.mrow .mtag{grid-column:2;justify-self:start;}}
 .search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:8px;}
 .legend{font-size:13px;color:var(--muted);margin:0 0 12px;}
 .list{display:flex;flex-direction:column;gap:8px;}
@@ -226,6 +237,8 @@ pre.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10p
   <section class="panel" id="data" role="tabpanel" aria-labelledby="t-data" hidden>
     <h2 class="sec" data-en="Automatic data">Data automatik</h2>
     <div id="feedInfo"><p class="lead">Memuatkan…</p></div>
+    <h2 class="sec" id="missingH" data-en="Counters not in the screener">Kaunter tiada dalam saringan</h2>
+    <div id="missingInfo"></div>
     <h2 class="sec" data-en="Add your own data (optional)">Tambah data sendiri (pilihan)</h2>
     <p class="lead" data-en="For counters not in the automatic data. Data you add here is stored in this browser only and is not visible to others. Rows with the same symbol and date replace the old ones.">Untuk kaunter yang tiada dalam data automatik. Data yang awak masukkan di sini disimpan dalam pelayar ini sahaja dan tidak dilihat orang lain. Baris dengan simbol dan tarikh yang sama akan menggantikan yang lama.</p>
     <label for="csv" class="sr" style="position:absolute;left:-9999px">Data CSV</label>
@@ -550,10 +563,14 @@ function feedText() {
     '<strong>' + esc(fmtStamp(FEED.updated)) + '</strong>. ' +
     tx('Yahoo Finance bukan sumber rasmi Bursa, jadi semak sekali-sekala dengan platform broker.', 'Yahoo Finance is not an official Bursa source, so check against your broker platform from time to time.');
 }
+function missNote() {
+  const n = missingRows().length; if (!n) return '';
+  return '<button class="linkbtn" data-act="gotomiss">' + n + tx(' kaunter tiada dalam saringan atau datanya tidak lengkap', ' counters are not in the screener or have incomplete data') + '</button>. ';
+}
 function noticeHTML() {
   if (!FEED) return '';
   return '<aside class="notice" aria-labelledby="nt-h"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 5.5v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14.3" r="1.2" fill="currentColor"/></svg>' +
-    '<div><h2 id="nt-h">' + tx('Data automatik', 'Automatic data') + '</h2><p>' + feedText() + ' ' + tx('Alat analisis teknikal sahaja, bukan nasihat pelaburan.', 'A technical analysis tool only, not investment advice.') + '</p></div></aside>';
+    '<div><h2 id="nt-h">' + tx('Data automatik', 'Automatic data') + '</h2><p>' + feedText() + ' ' + missNote() + tx('Alat analisis teknikal sahaja, bukan nasihat pelaburan.', 'A technical analysis tool only, not investment advice.') + '</p></div></aside>';
 }
 function setTheme(v) {
   v = v === 'dark' ? 'dark' : 'light';
@@ -768,16 +785,16 @@ function renderSaringan() {
   const cur = RES.rows.length - RES.stale;
   const V = VIEW || 'semua';
   let list = V === 'lulus' ? g.lulus : V === 'hampir' ? g.hampir : g.semua;
-  const q = QUERY.trim().toUpperCase(); if (q) list = list.filter(r => r.s.includes(q));
+  const q = QUERY.trim().toUpperCase(); if (q) list = list.filter(r => r.s.includes(q) || (NAMES[r.s] || '').toUpperCase().includes(q));
   const shown = list.slice(0, LIMIT);
-  const emptyMsg = q ? tx('Tiada simbol sepadan dengan “', 'No symbol matches “') + esc(QUERY.trim()) + '”.' : V === 'lulus' ? tx('Tiada saham lulus ' + allWord + ' untuk ', 'No stocks pass ' + allWord + ' on ') + fmtDate(RES.latest) + tx('. Semak senarai hampir lulus.', '. Check the near-pass list.') : V === 'hampir' ? tx('Tiada saham yang kurang satu penapis sahaja.', 'No stocks are just one filter short.') : tx('Tiada data.', 'No data.');
+  const emptyMsg = q ? tx('Tiada saham sepadan dengan “', 'No stock matches “') + esc(QUERY.trim()) + '”. ' + tx('Semak senarai kaunter tiada dalam saringan di tab Data.', 'Check the list of counters not in the screener in the Data tab.') : V === 'lulus' ? tx('Tiada saham lulus ' + allWord + ' untuk ', 'No stocks pass ' + allWord + ' on ') + fmtDate(RES.latest) + tx('. Semak senarai hampir lulus.', '. Check the near-pass list.') : V === 'hampir' ? tx('Tiada saham yang kurang satu penapis sahaja.', 'No stocks are just one filter short.') : tx('Tiada data.', 'No data.');
   el.innerHTML =
     '<div class="hero"><h2 class="num">' + (g.lulus.length ? g.lulus.length + tx(' saham lulus ', (g.lulus.length === 1 ? ' stock passes ' : ' stocks pass ')) + allWord : tx('Tiada saham lulus ', 'No stocks pass ') + allWord) + '</h2>' +
     '<p>' + tx('Data ', 'Data for ') + fmtDate(RES.latest) + '. ' + cur + tx(' kaunter disaring', ' counters screened') + (RES.stale ? ', ' + RES.stale + tx(' tiada data untuk tarikh ini', ' have no data for this date') : '') + '.</p></div>' + noticeHTML() +
     (q ? '' : '<h2 class="vh">' + tx('Ringkasan pasaran', 'Market summary') + '</h2><div class="viz">' + funnelHTML() + moversHTML() + '</div>') +
     '<div class="seg" role="group" aria-label="' + tx('Senarai', 'List') + '">' +
     [['semua', tx('Semua', 'All'), g.semua.length], ['lulus', tx('Lulus semua', 'Pass all'), g.lulus.length], ['hampir', tx('Hampir lulus', 'Near pass'), g.hampir.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
-    '<input class="search" id="q" type="search" placeholder="' + tx('Cari simbol', 'Search symbol') + '" aria-label="' + tx('Cari simbol', 'Search symbol') + '" value="' + esc(QUERY) + '">' +
+    '<input class="search" id="q" type="search" placeholder="' + tx('Cari simbol atau nama', 'Search symbol or name') + '" aria-label="' + tx('Cari simbol atau nama', 'Search symbol or name') + '" value="' + esc(QUERY) + '">' +
     '<p class="legend">' + tx('Vol = volum harian, 5H = harga 5 hari, V10 = purata volum 10 hari, RSI = RSI 14 hari, BB = Bollinger breakout. Tekan baris untuk lihat carta dan nilai.', 'Vol = daily volume, 5D = 5-day price, V10 = 10-day average volume, RSI = 14-day RSI, BB = Bollinger breakout. Tap a row to see the chart and values.') + '</p>' +
     (shown.length ? '<div class="list">' + shown.map(rowHTML).join('') + '</div>' : '<div class="empty">' + emptyMsg + '</div>') +
     (list.length > LIMIT ? '<button class="btn more" data-act="more">' + tx('Tunjuk lagi (', 'Show more (') + (list.length - LIMIT) + tx(' baki)', ' left)') + '</button>' : '') +
@@ -824,6 +841,37 @@ function renderPantauan() {
     '<p class="note">' + tx('MASUK bermaksud semua penapis teknikal lulus pada data terkini. Ia bukan nasihat pelaburan.', 'ENTRY means all technical filters pass on the latest data. It is not investment advice.') + '</p>';
   $('#wbadge').textContent = ready ? String(ready) : '';
 }
+let MQ = '';
+const MREASON = {
+  tiada_data: () => [tx('Tiada data Yahoo', 'No Yahoo data'), 'warn', tx('Ada dalam senarai, tetapi Yahoo Finance tiada harga untuk kaunter ini (mungkin digantung atau baru bertukar kod).', 'In the list, but Yahoo Finance has no prices for it (possibly suspended or recently changed code).')],
+  tiada_saham: () => [tx('Tiada jumlah saham', 'No shares outstanding'), 'warn', tx('Ditapis, tetapi tiada jumlah saham beredar, jadi tidak boleh lulus penapis Vol.', 'Screened, but has no shares outstanding, so it cannot pass the Vol filter.')],
+  etf: () => [tx('ETF', 'ETF'), '', tx('Dana dagangan bursa, bukan saham syarikat.', 'Exchange-traded funds, not company shares.')],
+  keutamaan: () => [tx('Saham keutamaan', 'Preference share'), '', tx('Saham keutamaan, bukan saham biasa.', 'Preference shares, not ordinary shares.')],
+  lain: () => [tx('Lain-lain', 'Other'), '', '']
+};
+function missingRows() {
+  const rows = ((FEED && FEED.missing) || []).slice();
+  for (const s of Object.keys(S.prices).sort()) if (!(S.shares[s] > 0)) rows.push({ s, n: NAMES[s] || '', r: 'tiada_saham' });
+  return rows;
+}
+function renderMissing() {
+  const el = $('#missingInfo'); if (!el) return;
+  const rows = missingRows();
+  if (!rows.length) { el.innerHTML = '<p class="lead">' + tx('Semua kaunter ada dalam saringan.', 'Every counter is in the screener.') + '</p>'; return; }
+  const cnt = {}; rows.forEach(r => { const k = MREASON[r.r] ? r.r : 'lain'; cnt[k] = (cnt[k] || 0) + 1; });
+  el.innerHTML = '<p class="lead">' + tx('Kaunter Bursa di bawah tidak ditapis, atau ditapis tetapi datanya tidak lengkap. Senarai ini dikemas kini bersama data automatik.', 'The Bursa counters below are not screened, or are screened with incomplete data. This list updates with the automatic data.') + '</p>' +
+    '<ul class="mcount" style="list-style:none;padding:0">' + Object.keys(MREASON).filter(k => cnt[k]).map(k => '<li title="' + esc(MREASON[k]()[2]) + '"><b class="num">' + cnt[k] + '</b> ' + esc(MREASON[k]()[0]) + '</li>').join('') + '</ul>' +
+    '<input class="search" id="mq" type="search" placeholder="' + tx('Cari kod atau nama kaunter', 'Search code or counter name') + '" aria-label="' + tx('Cari kaunter tiada dalam saringan', 'Search counters not in the screener') + '" value="' + esc(MQ) + '">' +
+    '<div id="missingList"></div>';
+  renderMissingList();
+}
+function renderMissingList() {
+  const el = $('#missingList'); if (!el) return;
+  const q = MQ.trim().toUpperCase();
+  const rows = missingRows().filter(r => !q || r.s.toUpperCase().includes(q) || (r.n || '').toUpperCase().includes(q));
+  if (!rows.length) { el.innerHTML = '<p class="lead">' + tx('Tiada kaunter sepadan dengan “', 'No counter matches “') + esc(MQ.trim()) + '”. ' + tx('Kalau ia saham biasa Bursa, ia mungkin sudah ada dalam saringan. Cari di tab Saringan.', 'If it is an ordinary Bursa share, it is probably already in the screener. Search in the Screener tab.') + '</p>'; return; }
+  el.innerHTML = '<div class="mlist" role="list">' + rows.map(r => { const m = (MREASON[r.r] || MREASON.lain)(); return '<div class="mrow" role="listitem"><span class="sym">' + esc(r.s) + '</span><span class="mn">' + esc(r.n || '–') + '</span><span class="mtag ' + m[1] + '" title="' + esc(m[2]) + '">' + esc(m[0]) + '</span></div>'; }).join('') + '</div>';
+}
 function renderDataSummary() {
   const el = $('#dataSummary'); const syms = Object.keys(S.prices);
   if (!syms.length) { el.innerHTML = '<p class="lead">' + tx('Belum ada data.', 'No data yet.') + '</p>'; return; }
@@ -856,8 +904,8 @@ function renderTabs() {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === TAB)));
   document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== TAB; });
 }
-function renderAll() { renderTabs(); renderSaringan(); renderPantauan(); renderDataSummary(); renderTetapan(); }
-function renderScreens() { renderSaringan(); renderPantauan(); renderDataSummary(); }
+function renderAll() { renderTabs(); renderSaringan(); renderPantauan(); renderDataSummary(); renderMissing(); renderTetapan(); }
+function renderScreens() { renderSaringan(); renderPantauan(); renderDataSummary(); renderMissing(); }
 
 /* ---------- actions ---------- */
 function setTab(t) { TAB = t; LS.set('pb_tab', t); renderTabs(); window.scrollTo(0, 0); }
@@ -881,6 +929,7 @@ document.addEventListener('click', e => {
   if (act === 'theme') { setTheme(t.dataset.val); return; }
   if (act === 'lang') { setLang(t.dataset.val); recompute(); renderAll(); renderFeedInfo(); renderStatus(); return; }
   if (act === 'goto') setTab(t.dataset.tab);
+  if (act === 'gotomiss') { setTab('data'); const h = $('#missingH'); if (h) h.scrollIntoView({ block: 'start' }); const m = $('#mq'); if (m) m.focus({ preventScroll: true }); return; }
   else if (act === 'view') { VIEW = t.dataset.view; LIMIT = 150; renderSaringan(); }
   else if (act === 'more') { LIMIT += 150; renderSaringan(); }
   else if (act === 'watch' || act === 'unwatch') {
@@ -914,6 +963,7 @@ document.addEventListener('pointermove', e => { if (e.target.closest && e.target
 document.addEventListener('pointerdown', e => { if (e.target.closest && e.target.closest('.chart')) chartMove(e); });
 document.addEventListener('pointerout', e => { if (e.target.closest && e.target.closest('.chart') && !(e.relatedTarget && e.target.closest('.chart').contains(e.relatedTarget))) chartLeave(e); });
 document.addEventListener('input', e => {
+  if (e.target.id === 'mq') { MQ = e.target.value; renderMissingList(); return; }
   if (e.target.id === 'q') { QUERY = e.target.value; LIMIT = 150; const pos = e.target.selectionStart; renderSaringan(); const q = $('#q'); q.focus(); try { q.setSelectionRange(pos, pos); } catch (x) { } }
 });
 let ftimer = null;

@@ -7,6 +7,7 @@
 1023  # CIMB
 5347  # Tenaga Nasional
 5225  # IHH Healthcare
+5235SS  # KLCC
 8869  # PMETAL
 5819  # HLBANK
 5285  # SDG
@@ -174,7 +175,7 @@
 6599  # AEON
 5069  # BLDPLNT
 2658  # AJI
-4219  # BPROP
+4219  # BPROP (Berjaya Property Bhd)
 7179  # LAGENDA
 0056  # NCT
 1287  # EXSIMHB
@@ -548,7 +549,7 @@
 0167  # MCLEAN
 0370  # XPB
 0189  # MATANG
-9776  # RSSB
+9776  # RSSB (Rivertree STF Synergies Bhd)
 7071  # OCR
 5192  # ECEXCEL
 5657  # PARKSON
@@ -677,7 +678,7 @@
 0290  # PANDA
 5316  # MSTGOLF
 0219  # RL
-0050  # WTS
+0050  # WTS (WTS Capital Bhd)
 0176  # KRONO
 0173  # CATCHA
 0471  # PIONEER
@@ -964,7 +965,7 @@
 0103  # MNC
 0055  # SERSOL
 7031  # AMTEL
-0041  # AIMAX
+0041  # AIMAX (Hong Seng Consolidated Berhad)
 7157  # CYL
 8672  # KAMDAR
 0122  # AIM

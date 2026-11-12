@@ -1,0 +1,22 @@
+# Kaunter Bursa yang sengaja tidak ditapis. Dipaparkan di website sebagai makluman.
+# Format: kod  # nama  [jenis]   (jenis: etf atau keutamaan)
+# Untuk menapis kaunter ini, pindahkan kodnya ke senarai_saham.txt.
+0150PA  # FINTEC-PA (Fintec Global Berhad)  [keutamaan]
+0165PA  # XOX-PA (XOX Berhad)  [keutamaan]
+0800EA  # ABFMY1 (ABF Malaysia Bond Index)  [etf]
+0820EA  # F4GBM-EA (FTSE Bursa Malaysia KLCI ETF)  [etf]
+0821EA  # EQ8MY25 (Eq8 Dow Jones Islamic Market Malaysia Titans 25 ETF)  [etf]
+0823EA  # EQ8C50 (Principal FTSE China 50 ETF)  [etf]
+0824EA  # EQ8MID (Eq8 MSCI Malaysia Islamic Dividend ETF)  [etf]
+0825EA  # EQ8SID (Eq8 MSCI SEA Islamic Dividend ETF)  [etf]
+0827EA  # EQ8US50 (Eq8 Dow Jones US Titans 50 ETF)  [etf]
+0828EA  # GOLDETF (TradePlus Shariah Gold ETF)  [etf]
+0829EA  # CHINAETF-MYR (TradePlus S&P New China Tracker ETF)  [etf]
+0838EA  # CHINA100-MYR (VP-DJ Shariah China A-Shares 100 ETF)  [etf]
+0839EA  # EQ8WAQF (Eq8 FTSE Malaysia Enhanced Dividend Waqf ETF)  [etf]
+1163PA  # ALLIANZ-PA (Allianz Malaysia Berhad)  [keutamaan]
+5789PA  # LBS-PA (LBS Bina Group Berhad)  [keutamaan]
+7066PA  # YONGTAI-PA (Yong Tai Berhad)  [keutamaan]
+8664PA  # SPSETIA-PA (S P Setia Berhad)  [keutamaan]
+8664PC  # SPSETIA-PC (S P Setia Berhad)  [keutamaan]
+7108PA  # PERDANA-PA  [keutamaan]
