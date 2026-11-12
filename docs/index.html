@@ -722,7 +722,7 @@ function renderSaringan() {
   const g = groups(); const onN = Object.values(S.filters).filter(f => f.on).length;
   const allWord = onN === 5 ? 'kelima-lima penapis' : 'semua ' + onN + ' penapis aktif';
   const cur = RES.rows.length - RES.stale;
-  const V = VIEW || (g.lulus.length ? 'lulus' : g.hampir.length ? 'hampir' : 'semua');
+  const V = VIEW || 'semua';
   let list = V === 'lulus' ? g.lulus : V === 'hampir' ? g.hampir : g.semua;
   const q = QUERY.trim().toUpperCase(); if (q) list = list.filter(r => r.s.includes(q));
   const shown = list.slice(0, LIMIT);
@@ -732,7 +732,7 @@ function renderSaringan() {
     '<p>Data ' + fmtDate(RES.latest) + '. ' + cur + ' kaunter disaring' + (RES.stale ? ', ' + RES.stale + ' tiada data untuk tarikh ini' : '') + '.</p></div>' + noticeHTML() +
     (q ? '' : '<h2 class="vh">Ringkasan pasaran</h2><div class="viz">' + funnelHTML() + moversHTML() + '</div>') +
     '<div class="seg" role="group" aria-label="Senarai">' +
-    [['lulus', 'Lulus semua', g.lulus.length], ['hampir', 'Hampir lulus', g.hampir.length], ['semua', 'Semua', g.semua.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
+    [['semua', 'Semua', g.semua.length], ['lulus', 'Lulus semua', g.lulus.length], ['hampir', 'Hampir lulus', g.hampir.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
     '<input class="search" id="q" type="search" placeholder="Cari simbol" aria-label="Cari simbol" value="' + esc(QUERY) + '">' +
     '<p class="legend">Vol = volum harian, 5H = harga 5 hari, V10 = purata volum 10 hari, RSI = RSI 14 hari, BB = Bollinger breakout. Tekan baris untuk lihat carta dan nilai.</p>' +
     (shown.length ? '<div class="list">' + shown.map(rowHTML).join('') + '</div>' : '<div class="empty">' + emptyMsg + '</div>') +
