@@ -23,6 +23,8 @@ jobs:
   tarik-data:
     if: github.event_name != 'push'
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,6 +40,22 @@ jobs:
           git add docs/data/bursa.json jumlah_saham.csv
           git diff --cached --quiet || git commit -m "Data Bursa $(TZ=Asia/Kuala_Lumpur date +%F)"
           git push
+      # Untuk website Next.js (web/): data disimpan dalam storan Supabase yang tertutup.
+      # Langkah ini dilangkau sehingga rahsia SUPABASE_URL dan SUPABASE_SECRET_KEY ditambah
+      # di GitHub: Settings > Secrets and variables > Actions.
+      - name: Muat naik data ke Supabase
+        if: env.SUPABASE_URL != ''
+        env:
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          gzip -9 -c docs/data/bursa.json > bursa.json.gz
+          auth=(-H "apikey: $SUPABASE_SECRET_KEY")
+          # Kunci lama (service_role, JWT) perlukan juga pengepala Authorization
+          case "$SUPABASE_SECRET_KEY" in sb_secret_*) ;; *) auth+=(-H "Authorization: Bearer $SUPABASE_SECRET_KEY") ;; esac
+          curl -fsS -X POST "${SUPABASE_URL%/}/storage/v1/object/data/bursa.json.gz" \
+            "${auth[@]}" -H "x-upsert: true" -H "Content-Type: application/gzip" \
+            -H "Cache-Control: max-age=60" --data-binary @bursa.json.gz
+          echo "Data dimuat naik ke Supabase ($(wc -c < bursa.json.gz) bait)."
 
   terbit:
     needs: tarik-data
