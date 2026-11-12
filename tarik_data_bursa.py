@@ -70,6 +70,17 @@ def baca_senarai(path):
     return kod
 
 
+def baca_nama(path):
+    """Nama syarikat dari komen dalam senarai, cth. "1155  # Maybank"."""
+    nama = {}
+    for baris in Path(path).read_text(encoding="utf-8").splitlines():
+        kod, _, komen = baris.partition("#")
+        kod = kod.strip().upper().replace(".KL", "")
+        if kod and komen.strip():
+            nama[kod] = komen.strip()
+    return nama
+
+
 def baca_simpanan_saham():
     data = {}
     if FAIL_SAHAM.exists():
@@ -155,7 +166,7 @@ def nombor(x, ganti):
     return ganti if math.isnan(x) else x
 
 
-def kemas_kini_json(harga, saham, senarai, masa):
+def kemas_kini_json(harga, saham, senarai, masa, nama=None):
     """Gabung data baharu ke dalam docs/data/bursa.json untuk website.
 
     Format setiap kaunter: "YYYYMMDD,open,high,low,close,volume;..." (sama
@@ -193,6 +204,7 @@ def kemas_kini_json(harga, saham, senarai, masa):
         "updated": masa.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
         "prices": prices,
         "shares": {k: saham[k] for k in prices if k in saham},
+        "names": {k: (nama or {})[k] for k in prices if k in (nama or {})},
     }
     FAIL_JSON.parent.mkdir(parents=True, exist_ok=True)
     FAIL_JSON.write_text(json.dumps(data, separators=(",", ":")), encoding="utf-8")
@@ -274,7 +286,7 @@ def main():
                 ])
                 bil_baris += 1
 
-    bil_json = kemas_kini_json(harga, saham, senarai, sekarang)
+    bil_json = kemas_kini_json(harga, saham, senarai, sekarang, baca_nama(args.senarai))
 
     tiada_data = [k for k in senarai if k not in harga or harga[k].empty]
     tiada_saham = [k for k in harga if k not in saham]
