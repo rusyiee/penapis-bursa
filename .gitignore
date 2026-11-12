@@ -1,0 +1,8 @@
+# Fail tempatan sahaja, tidak perlu dimuat naik ke GitHub
+output/
+ca_bundle.pem
+log_auto.txt
+com.bursart.tarikdata.plist
+__pycache__/
+.venv/
+.DS_Store

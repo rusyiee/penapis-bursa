@@ -1,0 +1,58 @@
+# Tarik data Bursa dari Yahoo Finance setiap petang hari bekerja,
+# simpan ke docs/data/bursa.json, dan terbitkan website di GitHub Pages.
+name: Kemas kini data Bursa
+
+on:
+  schedule:
+    - cron: "45 10 * * 1-5"   # 10:45 UTC = 6:45 petang waktu Malaysia, Isnin-Jumaat
+  workflow_dispatch:           # butang "Run workflow" untuk jalankan sendiri
+  push:
+    branches: [main]
+    paths: ["docs/**"]         # terbitkan semula bila website diubah
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: kemas-kini-data
+  cancel-in-progress: false
+
+jobs:
+  tarik-data:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install yfinance pandas
+      - name: Tarik data
+        run: python tarik_data_bursa.py --hari 15
+      - name: Simpan data ke repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/bursa.json jumlah_saham.csv
+          git diff --cached --quiet || git commit -m "Data Bursa $(TZ=Asia/Kuala_Lumpur date +%F)"
+          git push
+
+  terbit:
+    needs: tarik-data
+    if: always() && (needs.tarik-data.result == 'success' || needs.tarik-data.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deploy
+        uses: actions/deploy-pages@v4

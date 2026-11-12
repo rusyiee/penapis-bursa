@@ -1,0 +1,11 @@
+# Senarai kod saham Bursa, satu kod setiap baris.
+# Tambah atau buang kod mengikut kaunter yang awak nak tapis.
+# Teks selepas tanda # diabaikan.
+1155  # Maybank
+1295  # Public Bank
+1023  # CIMB
+5347  # Tenaga Nasional
+5183  # Petronas Chemicals
+5225  # IHH Healthcare
+6012  # Maxis
+4863  # Telekom Malaysia
