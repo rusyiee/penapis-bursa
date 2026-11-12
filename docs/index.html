@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Penapis Saham Bursa</title>
-<script>(function(){var t="light";try{t=localStorage.getItem("pb_theme")||"light";}catch(e){}document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+<script>(function(){var t="light";try{t=localStorage.getItem("pb_theme")||"light";}catch(e){}document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");try{if(localStorage.getItem("pb_lang")==="en")document.documentElement.lang="en";}catch(e){}})();</script>
 <meta name="description" content="Saringan teknikal harian saham Bursa Malaysia: volum, momentum, RSI dan Bollinger breakout. Data dikemas kini automatik setiap petang hari bekerja.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,8 +44,9 @@ button,input,select,textarea{font:inherit;color:inherit;}
 .brand p{margin:0;font-size:13px;color:var(--muted);}
 .brand{align-items:center;}
 .brand-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.toggles{display:flex;gap:8px;}
 .theme{display:inline-flex;background:var(--seg);border-radius:999px;padding:2px;gap:2px;}
-.theme button{display:inline-flex;align-items:center;gap:5px;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;cursor:pointer;}
+.theme button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:34px;min-height:28px;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;cursor:pointer;}
 .theme button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);}
 .notice{display:flex;gap:12px;align-items:flex-start;background:var(--amber-soft);border-radius:12px;padding:14px 16px;margin:0 0 20px;}
 .notice svg{flex:none;color:var(--amber);margin-top:2px;}
@@ -210,12 +211,12 @@ pre.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10p
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="brand"><h1>Penapis Bursa</h1><div class="brand-r"><p id="saveStatus">Memuatkan…</p><div class="theme" role="group" aria-label="Tema paparan"><button type="button" data-act="theme" data-val="light" aria-pressed="true"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M3 13l1.1-1.1M11.9 4.1 13 3"/></g></svg>Terang</button><button type="button" data-act="theme" data-val="dark" aria-pressed="false"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13.5 10.2A5.8 5.8 0 0 1 5.8 2.5a5.8 5.8 0 1 0 7.7 7.7z" fill="currentColor"/></svg>Gelap</button></div></div></div>
-    <nav class="tabs" role="tablist" aria-label="Bahagian">
-      <button role="tab" id="t-saringan" data-tab="saringan" aria-controls="saringan">Saringan</button>
-      <button role="tab" id="t-pantauan" data-tab="pantauan" aria-controls="pantauan">Pantauan<span class="badge" id="wbadge"></span></button>
+    <div class="brand"><h1>Penapis Bursa</h1><div class="brand-r"><p id="saveStatus">Memuatkan…</p><div class="toggles"><div class="theme" role="group" aria-label="Tema paparan" data-en-aria="Display theme"><button type="button" data-act="theme" data-val="light" aria-pressed="true" aria-label="Terang" data-en-aria="Light" title="Terang / Light"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M3 13l1.1-1.1M11.9 4.1 13 3"/></g></svg></button><button type="button" data-act="theme" data-val="dark" aria-pressed="false" aria-label="Gelap" data-en-aria="Dark" title="Gelap / Dark"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M13.5 10.2A5.8 5.8 0 0 1 5.8 2.5a5.8 5.8 0 1 0 7.7 7.7z" fill="currentColor"/></svg></button></div><div class="theme" role="group" aria-label="Bahasa" data-en-aria="Language"><button type="button" data-act="lang" data-val="ms" aria-pressed="true" lang="ms">BM</button><button type="button" data-act="lang" data-val="en" aria-pressed="false" lang="en">EN</button></div></div></div></div>
+    <nav class="tabs" role="tablist" aria-label="Bahagian" data-en-aria="Sections">
+      <button role="tab" id="t-saringan" data-tab="saringan" aria-controls="saringan"><span data-en="Screener">Saringan</span></button>
+      <button role="tab" id="t-pantauan" data-tab="pantauan" aria-controls="pantauan"><span data-en="Watchlist">Pantauan</span><span class="badge" id="wbadge"></span></button>
       <button role="tab" id="t-data" data-tab="data" aria-controls="data">Data</button>
-      <button role="tab" id="t-tetapan" data-tab="tetapan" aria-controls="tetapan">Tetapan</button>
+      <button role="tab" id="t-tetapan" data-tab="tetapan" aria-controls="tetapan"><span data-en="Settings">Tetapan</span></button>
     </nav>
   </div>
 </header>
@@ -223,28 +224,28 @@ pre.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10p
   <section class="panel" id="saringan" role="tabpanel" aria-labelledby="t-saringan"></section>
   <section class="panel" id="pantauan" role="tabpanel" aria-labelledby="t-pantauan" hidden></section>
   <section class="panel" id="data" role="tabpanel" aria-labelledby="t-data" hidden>
-    <h2 class="sec">Data automatik</h2>
+    <h2 class="sec" data-en="Automatic data">Data automatik</h2>
     <div id="feedInfo"><p class="lead">Memuatkan…</p></div>
-    <h2 class="sec">Tambah data sendiri (pilihan)</h2>
-    <p class="lead">Untuk kaunter yang tiada dalam data automatik. Data yang awak masukkan di sini disimpan dalam pelayar ini sahaja dan tidak dilihat orang lain. Baris dengan simbol dan tarikh yang sama akan menggantikan yang lama.</p>
+    <h2 class="sec" data-en="Add your own data (optional)">Tambah data sendiri (pilihan)</h2>
+    <p class="lead" data-en="For counters not in the automatic data. Data you add here is stored in this browser only and is not visible to others. Rows with the same symbol and date replace the old ones.">Untuk kaunter yang tiada dalam data automatik. Data yang awak masukkan di sini disimpan dalam pelayar ini sahaja dan tidak dilihat orang lain. Baris dengan simbol dan tarikh yang sama akan menggantikan yang lama.</p>
     <label for="csv" class="sr" style="position:absolute;left:-9999px">Data CSV</label>
     <textarea id="csv" spellcheck="false" placeholder="simbol,tarikh,open,high,low,close,volume&#10;1155,11/11/2026,9.80,9.90,9.75,9.88,12345600"></textarea>
     <div class="actions">
-      <button class="btn primary" data-act="import">Masukkan data</button>
-      <span class="btn file">Muat naik fail CSV<input type="file" id="file" accept=".csv,.txt,text/csv,text/plain" aria-label="Muat naik fail CSV"></span>
+      <button class="btn primary" data-act="import" data-en="Add data">Masukkan data</button>
+      <span class="btn file"><span data-en="Upload CSV file">Muat naik fail CSV</span><input type="file" id="file" accept=".csv,.txt,text/csv,text/plain" aria-label="Muat naik fail CSV" data-en-aria="Upload CSV file"></span>
     </div>
     <div class="msg" id="importMsg" role="status"></div>
-    <h2 class="sec">Format yang diterima</h2>
-    <p class="lead">Harga harian, satu baris setiap saham setiap hari. Tarikh boleh dalam bentuk 2026-11-11 atau 11/11/2026. Kolum ke-8 (jumlah saham beredar) adalah pilihan.</p>
+    <h2 class="sec" data-en="Accepted format">Format yang diterima</h2>
+    <p class="lead" data-en="Daily prices, one row per stock per day. Dates can be 2026-11-11 or 11/11/2026. The 8th column (shares outstanding) is optional.">Harga harian, satu baris setiap saham setiap hari. Tarikh boleh dalam bentuk 2026-11-11 atau 11/11/2026. Kolum ke-8 (jumlah saham beredar) adalah pilihan.</p>
     <pre class="fmt">simbol,tarikh,open,high,low,close,volume,jumlah_saham
 1155,11/11/2026,9.80,9.90,9.75,9.88,12345600,11960000000</pre>
-    <p class="lead">Jumlah saham beredar cukup dimasukkan sekali sahaja, dalam baris dua kolum:</p>
+    <p class="lead" data-en="Shares outstanding only needs to be added once, in two-column rows:">Jumlah saham beredar cukup dimasukkan sekali sahaja, dalam baris dua kolum:</p>
     <pre class="fmt">simbol,jumlah_saham
 1155,11960000000</pre>
-    <h2 class="sec">Ringkasan data</h2>
+    <h2 class="sec" data-en="Data summary">Ringkasan data</h2>
     <div id="dataSummary"></div>
     <div class="actions" style="margin-top:16px">
-      <button class="btn" data-act="demo">Cuba data contoh</button>
+      <button class="btn" data-act="demo" data-en="Try sample data">Cuba data contoh</button>
       <button class="btn danger" data-act="clear" id="clearBtn">Padam data dalam pelayar ini</button>
     </div>
   </section>
@@ -252,6 +253,9 @@ pre.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10p
 </main>
 <script>
 const MAXD = 150, NB = 64;
+let LANG = 'ms';
+try { LANG = localStorage.getItem('pb_lang') === 'en' ? 'en' : 'ms'; } catch (e) { }
+const tx = (ms, en) => LANG === 'en' ? en : ms;
 const DEF_FILTERS = () => ({
   f1: { on: true, min: 0.60, max: null },
   f2: { on: true, min: 0.41, max: null },
@@ -348,28 +352,28 @@ function evalAt(sym, p, ser, i, F, shares) {
   const sh = shares[sym]; const c = p.c, v = p.v; const out = [];
   // f1
   { let st = 'na', val = null, why = '';
-    if (!(sh > 0)) why = 'Tiada jumlah saham';
+    if (!(sh > 0)) why = tx('Tiada jumlah saham', 'No shares outstanding');
     else { val = v[i] / sh * 100; st = inRange(val, F.f1) ? 'pass' : 'fail'; }
     out.push({ k: 'f1', on: F.f1.on, st, val, why }); }
   { let st = 'na', val = null, why = '';
-    if (i < 5) why = 'Perlu data 6 hari';
+    if (i < 5) why = tx('Perlu data 6 hari', 'Needs 6 days of data');
     else { val = (c[i] / c[i - 5] - 1) * 100; st = inRange(val, F.f2) ? 'pass' : 'fail'; }
     out.push({ k: 'f2', on: F.f2.on, st, val, why }); }
   { let st = 'na', val = null, why = ''; const mode = F.f3.mode || 'pct';
-    if (mode === 'pct') { if (!(sh > 0)) why = 'Tiada jumlah saham'; else if (i < 9) why = 'Perlu data 10 hari'; else val = avg(v, i - 9, i) / sh * 100; }
-    else if (mode === 'ratio') { if (i < 10) why = 'Perlu data 11 hari'; else { const a = avg(v, i - 10, i - 1); val = a > 0 ? v[i] / a : null; if (val == null) why = 'Purata volum sifar'; } }
-    else { if (i < 9) why = 'Perlu data 10 hari'; else val = avg(v, i - 9, i) / 1e6; }
+    if (mode === 'pct') { if (!(sh > 0)) why = tx('Tiada jumlah saham', 'No shares outstanding'); else if (i < 9) why = tx('Perlu data 10 hari', 'Needs 10 days of data'); else val = avg(v, i - 9, i) / sh * 100; }
+    else if (mode === 'ratio') { if (i < 10) why = tx('Perlu data 11 hari', 'Needs 11 days of data'); else { const a = avg(v, i - 10, i - 1); val = a > 0 ? v[i] / a : null; if (val == null) why = tx('Purata volum sifar', 'Average volume is zero'); } }
+    else { if (i < 9) why = tx('Perlu data 10 hari', 'Needs 10 days of data'); else val = avg(v, i - 9, i) / 1e6; }
     if (val != null) st = inRange(val, F.f3) ? 'pass' : 'fail';
     out.push({ k: 'f3', on: F.f3.on, st, val, why, mode }); }
   { let st = 'na', val = ser.rsi[i], why = '';
-    if (val == null) why = 'Perlu data 15 hari'; else st = inRange(val, F.f4) ? 'pass' : 'fail';
+    if (val == null) why = tx('Perlu data 15 hari', 'Needs 15 days of data'); else st = inRange(val, F.f4) ? 'pass' : 'fail';
     out.push({ k: 'f4', on: F.f4.on, st, val, why }); }
   { let st = 'na', val = null, why = '', up = ser.up[i], wasAbove = false;
-    if (up == null) why = 'Perlu data 20 hari';
+    if (up == null) why = tx('Perlu data 20 hari', 'Needs 20 days of data');
     else {
       val = (c[i] / up - 1) * 100; const above = c[i] > up;
       wasAbove = i > 0 && ser.up[i - 1] != null && c[i - 1] > ser.up[i - 1];
-      if (F.f5.fresh && i > 0 && ser.up[i - 1] == null) { st = 'na'; why = 'Perlu data 21 hari'; }
+      if (F.f5.fresh && i > 0 && ser.up[i - 1] == null) { st = 'na'; why = tx('Perlu data 21 hari', 'Needs 21 days of data'); }
       else st = above && !(F.f5.fresh && wasAbove) ? 'pass' : 'fail';
     }
     out.push({ k: 'f5', on: F.f5.on, st, val, why, up, mid: ser.mid[i], wasAbove }); }
@@ -416,17 +420,37 @@ function demoCSV(today) {
   }
   return lines.join('\n');
 }
-const FN = { f1: 'Volum harian ÷ saham beredar', f2: 'Perubahan harga 5 hari', f3: 'Purata volum 10 hari', f4: 'RSI 14 hari', f5: 'Bollinger breakout (20, 2)' };
-const FS = { f1: 'Vol', f2: '5H', f3: 'V10', f4: 'RSI', f5: 'BB' };
-const FD = {
-  f1: 'Volum hari ini sebagai peratus daripada jumlah saham beredar. Tinggi bermaksud saham itu luar biasa aktif.',
-  f2: 'Harga tutup hari ini berbanding 5 hari dagangan lepas.',
-  f3: 'Purata volum 10 hari dagangan terakhir, menunjukkan minat yang berterusan.',
-  f4: 'Momentum harga dari 0 hingga 100. Atas 50 bermaksud pembeli lebih kuat kebelakangan ini.',
-  f5: 'Harga tutup melepasi jalur atas Bollinger Band (purata 20 hari + 2 sisihan piawai).'
+const TBL = {
+  ms: {
+    FN: { f1: 'Volum harian ÷ saham beredar', f2: 'Perubahan harga 5 hari', f3: 'Purata volum 10 hari', f4: 'RSI 14 hari', f5: 'Bollinger breakout (20, 2)' },
+    FS: { f1: 'Vol', f2: '5H', f3: 'V10', f4: 'RSI', f5: 'BB' },
+    FD: {
+      f1: 'Volum hari ini sebagai peratus daripada jumlah saham beredar. Tinggi bermaksud saham itu luar biasa aktif.',
+      f2: 'Harga tutup hari ini berbanding 5 hari dagangan lepas.',
+      f3: 'Purata volum 10 hari dagangan terakhir, menunjukkan minat yang berterusan.',
+      f4: 'Momentum harga dari 0 hingga 100. Atas 50 bermaksud pembeli lebih kuat kebelakangan ini.',
+      f5: 'Harga tutup melepasi jalur atas Bollinger Band (purata 20 hari + 2 sisihan piawai).'
+    },
+    F3MODES: { pct: '% saham beredar', ratio: 'Nisbah volum hari ini ÷ purata 10 hari', juta: 'Juta unit saham' },
+    MON: ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis']
+  },
+  en: {
+    FN: { f1: 'Daily volume ÷ shares outstanding', f2: '5-day price change', f3: '10-day average volume', f4: '14-day RSI', f5: 'Bollinger breakout (20, 2)' },
+    FS: { f1: 'Vol', f2: '5D', f3: 'V10', f4: 'RSI', f5: 'BB' },
+    FD: {
+      f1: "Today's volume as a percentage of shares outstanding. High means the stock is unusually active.",
+      f2: "Today's closing price compared with 5 trading days ago.",
+      f3: 'Average volume over the last 10 trading days, showing sustained interest.',
+      f4: 'Price momentum from 0 to 100. Above 50 means buyers have been stronger lately.',
+      f5: 'Closing price breaks above the upper Bollinger Band (20-day average + 2 standard deviations).'
+    },
+    F3MODES: { pct: '% of shares outstanding', ratio: "Today's volume ÷ 10-day average", juta: 'Million shares' },
+    MON: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  }
 };
-const F3MODES = { pct: '% saham beredar', ratio: 'Nisbah volum hari ini ÷ purata 10 hari', juta: 'Juta unit saham' };
-const MON = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
+let FN, FS, FD, F3MODES, MON;
+function applyTables() { ({ FN, FS, FD, F3MODES, MON } = TBL[LANG]); }
+applyTables();
 
 const S = { prices: {}, shares: {}, watch: {}, filters: DEF_FILTERS() };
 let RES = null, VIEW = null, QUERY = '', LIMIT = 150, TAB = 'saringan';
@@ -444,7 +468,7 @@ const LS = {
 function fmtDate(d) { if (!d) return '–'; const [y, m, dd] = d.split('-'); return (+dd) + ' ' + MON[+m - 1] + ' ' + y; }
 function fmtPx(p) { return p < 10 ? p.toFixed(3) : p.toFixed(2); }
 function fmtPct(v) { return (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + '%'; }
-function fmtBig(n) { if (n >= 1e9) return (n / 1e9).toFixed(2) + ' bilion'; if (n >= 1e6) return (n / 1e6).toFixed(2) + ' juta'; return Math.round(n).toLocaleString('en-US'); }
+function fmtBig(n) { if (n >= 1e9) return (n / 1e9).toFixed(2) + tx(' bilion', ' billion'); if (n >= 1e6) return (n / 1e6).toFixed(2) + tx(' juta', ' million'); return Math.round(n).toLocaleString('en-US'); }
 function trimNum(x) { return String(+x.toFixed(4)); }
 function fmtTh(n) { return Math.abs(n * 100 - Math.round(n * 100)) < 1e-9 ? n.toFixed(2) : trimNum(n); }
 
@@ -505,7 +529,7 @@ let FEED = null;
 function fmtStamp(iso) {
   const k = String(iso || '').match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/);
   if (!k) return '–';
-  const hr = +k[2], t = (hr % 12 || 12) + ':' + k[3] + (hr < 12 ? ' pagi' : hr < 19 ? ' petang' : ' malam');
+  const hr = +k[2], t = (hr % 12 || 12) + ':' + k[3] + (LANG === 'en' ? (hr < 12 ? ' am' : ' pm') : hr < 12 ? ' pagi' : hr < 19 ? ' petang' : ' malam');
   return fmtDate(k[1]) + ', ' + t;
 }
 function mergeFeed(f) {
@@ -521,12 +545,15 @@ function mergeFeed(f) {
 }
 function feedText() {
   const n = Object.keys(FEED.prices || {}).length;
-  return 'Harga ' + n + ' kaunter ditarik dari Yahoo Finance setiap petang hari bekerja selepas pasaran tutup. Kemas kini terakhir: <strong>' + esc(fmtStamp(FEED.updated)) + '</strong>. Yahoo Finance bukan sumber rasmi Bursa, jadi semak sekali-sekala dengan platform broker.';
+  return tx('Harga ' + n + ' kaunter ditarik dari Yahoo Finance setiap petang hari bekerja selepas pasaran tutup. Kemas kini terakhir: ',
+    'Prices for ' + n + ' counters are pulled from Yahoo Finance every weekday evening after the market closes. Last updated: ') +
+    '<strong>' + esc(fmtStamp(FEED.updated)) + '</strong>. ' +
+    tx('Yahoo Finance bukan sumber rasmi Bursa, jadi semak sekali-sekala dengan platform broker.', 'Yahoo Finance is not an official Bursa source, so check against your broker platform from time to time.');
 }
 function noticeHTML() {
   if (!FEED) return '';
   return '<aside class="notice" aria-labelledby="nt-h"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 5.5v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14.3" r="1.2" fill="currentColor"/></svg>' +
-    '<div><h2 id="nt-h">Data automatik</h2><p>' + feedText() + ' Alat analisis teknikal sahaja, bukan nasihat pelaburan.</p></div></aside>';
+    '<div><h2 id="nt-h">' + tx('Data automatik', 'Automatic data') + '</h2><p>' + feedText() + ' ' + tx('Alat analisis teknikal sahaja, bukan nasihat pelaburan.', 'A technical analysis tool only, not investment advice.') + '</p></div></aside>';
 }
 function setTheme(v) {
   v = v === 'dark' ? 'dark' : 'light';
@@ -534,24 +561,41 @@ function setTheme(v) {
   LS.set('pb_theme', v);
   document.querySelectorAll('[data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.val === v)));
 }
+function renderStatus() {
+  $('#saveStatus').textContent = FEED ? tx('Dikemas kini ', 'Updated ') + fmtStamp(FEED.updated) : tx('Data automatik tidak dapat dimuatkan', 'Automatic data could not be loaded');
+}
+function setLang(v) {
+  LANG = v === 'en' ? 'en' : 'ms';
+  LS.set('pb_lang', LANG);
+  document.documentElement.lang = LANG;
+  applyTables();
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if (el.dataset.ms == null) el.dataset.ms = el.innerHTML;
+    el.innerHTML = LANG === 'en' ? el.dataset.en : el.dataset.ms;
+  });
+  document.querySelectorAll('[data-en-aria]').forEach(el => {
+    if (el.dataset.msAria == null) el.dataset.msAria = el.getAttribute('aria-label') || '';
+    el.setAttribute('aria-label', LANG === 'en' ? el.dataset.enAria : el.dataset.msAria);
+  });
+  document.querySelectorAll('[data-act="lang"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.val === LANG)));
+}
 function renderFeedInfo() {
   const el = $('#feedInfo'); if (!el) return;
-  if (!FEED) { el.innerHTML = '<p class="lead">Data automatik tidak dapat dimuatkan. Semak sambungan internet dan muat semula halaman.</p>'; return; }
+  if (!FEED) { el.innerHTML = '<p class="lead">' + tx('Data automatik tidak dapat dimuatkan. Semak sambungan internet dan muat semula halaman.', 'Automatic data could not be loaded. Check your internet connection and reload the page.') + '</p>'; return; }
   el.innerHTML = '<p class="lead">' + feedText() + '</p>';
 }
 async function loadFeed() {
-  $('#saveStatus').textContent = 'Memuatkan data terkini…';
+  $('#saveStatus').textContent = tx('Memuatkan data terkini…', 'Loading latest data…');
   try {
     const r = await fetch('data/bursa.json?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     FEED = await r.json();
     mergeFeed(FEED);
     NAMES = FEED.names || {};
-    $('#saveStatus').textContent = 'Dikemas kini ' + fmtStamp(FEED.updated);
   } catch (e) {
     FEED = null;
-    $('#saveStatus').textContent = 'Data automatik tidak dapat dimuatkan';
   }
+  renderStatus();
   recompute(); renderAll(); renderFeedInfo();
 }
 
@@ -576,35 +620,35 @@ function groups() {
   const semua = RES.rows.slice().sort((a, b) => (b.cur - a.cur) || (b.e.pass - a.e.pass) || a.s.localeCompare(b.s));
   return { lulus, hampir, semua };
 }
-function unit(k) { if (k === 'f1' || k === 'f2') return '%'; if (k === 'f3') { const m = S.filters.f3.mode; return m === 'ratio' ? '×' : m === 'juta' ? ' juta' : '%'; } return ''; }
+function unit(k) { if (k === 'f1' || k === 'f2') return '%'; if (k === 'f3') { const m = S.filters.f3.mode; return m === 'ratio' ? '×' : m === 'juta' ? tx(' juta', ' million') : '%'; } return ''; }
 function ruleText(k) {
   const f = S.filters[k];
-  if (k === 'f5') return f.fresh ? 'Tutup atas jalur atas, hari pertama' : 'Tutup atas jalur atas';
-  const u = unit(k); return f.max == null ? '≥ ' + fmtTh(f.min) + u : fmtTh(f.min) + u + ' hingga ' + fmtTh(f.max) + u;
+  if (k === 'f5') return f.fresh ? tx('Tutup atas jalur atas, hari pertama', 'Closes above upper band, first day') : tx('Tutup atas jalur atas', 'Closes above upper band');
+  const u = unit(k); return f.max == null ? '≥ ' + fmtTh(f.min) + u : fmtTh(f.min) + u + tx(' hingga ', ' to ') + fmtTh(f.max) + u;
 }
 function valText(ch) {
   if (ch.val == null) return ch.why || '–';
   switch (ch.k) {
     case 'f1': return ch.val.toFixed(2) + '%';
     case 'f2': return fmtPct(ch.val);
-    case 'f3': return ch.mode === 'ratio' ? ch.val.toFixed(2) + '×' : ch.mode === 'juta' ? ch.val.toFixed(2) + ' juta' : ch.val.toFixed(2) + '%';
+    case 'f3': return ch.mode === 'ratio' ? ch.val.toFixed(2) + '×' : ch.mode === 'juta' ? ch.val.toFixed(2) + tx(' juta', ' million') : ch.val.toFixed(2) + '%';
     case 'f4': return ch.val.toFixed(2);
     case 'f5': {
       if (ch.st === 'na') return ch.why;
-      if (ch.val > 0 && S.filters.f5.fresh && ch.wasAbove) return 'Sudah di atas jalur sejak sesi sebelum';
-      return ch.val > 0 ? fmtPct(ch.val) + ' atas jalur' : fmtPct(ch.val) + ' bawah jalur';
+      if (ch.val > 0 && S.filters.f5.fresh && ch.wasAbove) return tx('Sudah di atas jalur sejak sesi sebelum', 'Already above the band since the previous session');
+      return ch.val > 0 ? fmtPct(ch.val) + tx(' atas jalur', ' above band') : fmtPct(ch.val) + tx(' bawah jalur', ' below band');
     }
   }
 }
-function markText(ch) { if (!ch.on) return ['off', 'Dimatikan']; if (ch.st === 'pass') return ['pass', 'Lulus']; if (ch.st === 'fail') return ['fail', 'Gagal']; return ['na', 'Tiada data']; }
+function markText(ch) { if (!ch.on) return ['off', tx('Dimatikan', 'Off')]; if (ch.st === 'pass') return ['pass', tx('Lulus', 'Pass')]; if (ch.st === 'fail') return ['fail', tx('Gagal', 'Fail')]; return ['na', tx('Tiada data', 'No data')]; }
 function lamps(e) {
-  return '<span class="lamps' + (e.all ? ' full' : '') + '" role="img" aria-label="' + e.pass + ' daripada ' + e.onCount + ' penapis lulus">' +
+  return '<span class="lamps' + (e.all ? ' full' : '') + '" role="img" aria-label="' + e.pass + tx(' daripada ', ' of ') + e.onCount + tx(' penapis lulus', ' filters pass') + '">' +
     e.checks.map(ch => '<span class="lamp ' + (ch.on ? ch.st : 'off') + '"><i></i><b>' + FS[ch.k] + '</b></span>').join('') + '</span>';
 }
 function dayChg(p) { const n = p.c.length; return n > 1 ? (p.c[n - 1] / p.c[n - 2] - 1) * 100 : null; }
 function pxLine(r) {
   const n = r.p.c.length, ch = dayChg(r.p);
-  return '<span class="px num">RM ' + fmtPx(r.p.c[n - 1]) + (ch == null ? '' : ' <em class="' + (ch >= 0 ? 'up' : 'dn') + '">' + fmtPct(ch) + '</em>') + (r.cur ? '' : ' · data ' + fmtDate(r.p.d[n - 1])) + '</span>';
+  return '<span class="px num">RM ' + fmtPx(r.p.c[n - 1]) + (ch == null ? '' : ' <em class="' + (ch >= 0 ? 'up' : 'dn') + '">' + fmtPct(ch) + '</em>') + (r.cur ? '' : tx(' · data ', ' · data from ') + fmtDate(r.p.d[n - 1])) + '</span>';
 }
 /* ---------- carta ---------- */
 let NAMES = {};
@@ -621,7 +665,7 @@ function spark(r) {
   const W = 84, H = 28, P = 3, mn = Math.min(...c), mx = Math.max(...c), sp = (mx - mn) || 1;
   const x = i => P + i * (W - 2 * P) / (c.length - 1), y = v => H - P - (v - mn) / sp * (H - 2 * P);
   const ch = (c[c.length - 1] / c[0] - 1) * 100, last = c.length - 1;
-  return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="Harga ' + c.length + ' hari: ' + fmtPct(ch) + '">' +
+  return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + tx('Harga ' + c.length + ' hari: ', c.length + '-day price: ') + fmtPct(ch) + '">' +
     '<polyline class="spark-l" points="' + c.map((v, i) => x(i).toFixed(1) + ',' + y(v).toFixed(1)).join(' ') + '"/>' +
     '<circle r="2.5" class="' + (ch >= 0 ? 'spark-up' : 'spark-dn') + '" cx="' + x(last).toFixed(1) + '" cy="' + y(c[last]).toFixed(1) + '"/></svg>';
 }
@@ -642,20 +686,20 @@ function chartHTML(r) {
   const band = bandK.length > 1 ? 'M' + bandK.map(k => x(k).toFixed(1) + ' ' + y(g.up[k]).toFixed(1)).join('L') + 'L' + bandK.slice().reverse().map(k => x(k).toFixed(1) + ' ' + y(g.lo[k]).toFixed(1)).join('L') + 'Z' : '';
   const ticks = niceTicks(mn, mx, 4);
   const bw = Math.max(1, xw - 2);
-  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Carta harga ' + esc(r.s) + ' ' + K + ' hari dagangan terakhir">';
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + tx('Carta harga ' + esc(r.s) + ' ' + K + ' hari dagangan terakhir', esc(r.s) + ' price chart, last ' + K + ' trading days') + '">';
   s += ticks.map(t => '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t).toFixed(1) + '" y2="' + y(t).toFixed(1) + '"/><text class="ax" x="' + (W - R + 6) + '" y="' + (y(t) + 4).toFixed(1) + '">' + fmtPx(t) + '</text>').join('');
   if (band) s += '<path class="band" d="' + band + '"/><path class="bl" d="' + path(g.up, y) + '"/><path class="bl" d="' + path(g.lo, y) + '"/><path class="mid" d="' + path(g.mid, y) + '"/>';
   s += '<path class="cl" d="' + path(g.c, y) + '"/>';
   s += '<circle class="dot" r="4" cx="' + x(K - 1).toFixed(1) + '" cy="' + y(g.c[K - 1]).toFixed(1) + '"/>';
   s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + vb + '" y2="' + vb + '"/>';
   s += g.v.map((v, k) => { const h = Math.max(v > 0 ? 1 : 0, v / vmax * VH); return '<rect class="vb' + (k === K - 1 ? ' last' : '') + '" x="' + (x(k) - bw / 2).toFixed(1) + '" y="' + (vb - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + Math.min(2, bw / 2).toFixed(1) + '"/>'; }).join('');
-  s += '<text class="ax" x="' + (W - R + 6) + '" y="' + (vb - VH + 9) + '">' + fmtBig(vmax).replace(' bilion', 'b').replace(' juta', 'j') + '</text><text class="ax" x="' + (W - R + 6) + '" y="' + (vb + 1) + '">Volum</text>';
+  s += '<text class="ax" x="' + (W - R + 6) + '" y="' + (vb - VH + 9) + '">' + fmtBig(vmax).replace(/ (bilion|billion)$/, 'b').replace(/ (juta|million)$/, tx('j', 'm')) + '</text><text class="ax" x="' + (W - R + 6) + '" y="' + (vb + 1) + '">' + tx('Volum', 'Volume') + '</text>';
   const xl = [0, Math.floor((K - 1) / 2), K - 1];
   s += xl.map((k, j) => '<text class="ax" text-anchor="' + (j === 0 ? 'start' : j === 2 ? 'end' : 'middle') + '" x="' + (j === 0 ? L : j === 2 ? W - R : x(k)).toFixed(1) + '" y="' + (H - 4) + '">' + fmtDate(g.d[k]) + '</text>').join('');
   s += '<g class="xhg" visibility="hidden"><line class="xh" y1="' + T + '" y2="' + vb + '"/><circle class="dot" r="4"/></g>';
   s += '<rect class="hit" x="' + L + '" y="0" width="' + (W - L - R) + '" height="' + vb + '"/></svg>';
   CH[r.s] = { g, W, L, R, xw, x, y, K };
-  return '<div class="ckey"><span><i class="k-cl"></i>Harga tutup</span>' + (band ? '<span><i class="k-band"></i>Jalur Bollinger (20, 2)</span><span><i class="k-mid"></i>SMA20</span>' : '') + '<span><i class="k-vol"></i>Volum</span></div>' +
+  return '<div class="ckey"><span><i class="k-cl"></i>' + tx('Harga tutup', 'Close') + '</span>' + (band ? '<span><i class="k-band"></i>' + tx('Jalur Bollinger (20, 2)', 'Bollinger band (20, 2)') + '</span><span><i class="k-mid"></i>SMA20</span>' : '') + '<span><i class="k-vol"></i>' + tx('Volum', 'Volume') + '</span></div>' +
     '<div class="chart" data-sym="' + esc(r.s) + '">' + s + '<div class="tip" hidden></div></div>';
 }
 function chartMove(e) {
@@ -669,8 +713,8 @@ function chartMove(e) {
   const dt = grp.querySelector('circle'); dt.setAttribute('cx', X); dt.setAttribute('cy', Y);
   const prev = k > 0 ? g.c[k - 1] : null;
   const tip = box.querySelector('.tip');
-  tip.innerHTML = '<b>' + fmtDate(g.d[k]) + '</b><br>Tutup RM ' + fmtPx(g.c[k]) + (prev ? ' (' + fmtPct((g.c[k] / prev - 1) * 100) + ')' : '') +
-    '<br>Volum ' + fmtBig(g.v[k]) + (g.rsi[k] != null ? '<br>RSI ' + g.rsi[k].toFixed(1) : '') + (g.up[k] != null ? '<br>Jalur atas RM ' + fmtPx(g.up[k]) : '');
+  tip.innerHTML = '<b>' + fmtDate(g.d[k]) + '</b><br>' + tx('Tutup', 'Close') + ' RM ' + fmtPx(g.c[k]) + (prev ? ' (' + fmtPct((g.c[k] / prev - 1) * 100) + ')' : '') +
+    '<br>' + tx('Volum ', 'Volume ') + fmtBig(g.v[k]) + (g.rsi[k] != null ? '<br>RSI ' + g.rsi[k].toFixed(1) : '') + (g.up[k] != null ? '<br>' + tx('Jalur atas', 'Upper band') + ' RM ' + fmtPx(g.up[k]) : '');
   tip.hidden = false;
   const px = X / sc, tw = tip.offsetWidth;
   tip.style.left = Math.max(0, Math.min(rc.width - tw, px + (px > rc.width / 2 ? -tw - 12 : 12))) + 'px';
@@ -683,12 +727,12 @@ function funnelHTML() {
   const cur = RES.rows.filter(r => r.cur), N = cur.length; if (!N) return '';
   const keys = ['f1', 'f2', 'f3', 'f4', 'f5'].filter(k => S.filters[k].on);
   const row = (lb, list, cls) => { const n = list.length, w = n / N * 100;
-    return '<div class="lb' + (cls ? ' ' + cls : '') + '" title="' + esc(list.map(r => r.s + (NAMES[r.s] ? ' ' + NAMES[r.s] : '')).join(', ') || 'Tiada') + '">' + lb + '</div>' +
-      '<div class="bar' + (cls ? ' ' + cls : '') + '" role="img" aria-label="' + n + ' daripada ' + N + '"><i style="width:' + w.toFixed(1) + '%"></i></div>' +
+    return '<div class="lb' + (cls ? ' ' + cls : '') + '" title="' + esc(list.map(r => r.s + (NAMES[r.s] ? ' ' + NAMES[r.s] : '')).join(', ') || tx('Tiada', 'None')) + '">' + lb + '</div>' +
+      '<div class="bar' + (cls ? ' ' + cls : '') + '" role="img" aria-label="' + n + tx(' daripada ', ' of ') + N + '"><i style="width:' + w.toFixed(1) + '%"></i></div>' +
       '<div class="v num' + (cls ? ' ' + cls : '') + '">' + n + '/' + N + '</div>'; };
-  return '<div class="vcard"><h3>Siapa lulus setiap penapis</h3><p class="sub">Bilangan kaunter yang lulus setiap syarat pada ' + fmtDate(RES.latest) + '.</p><div class="fun">' +
+  return '<div class="vcard"><h3>' + tx('Siapa lulus setiap penapis', 'Who passes each filter') + '</h3><p class="sub">' + tx('Bilangan kaunter yang lulus setiap syarat pada ', 'Number of counters passing each condition on ') + fmtDate(RES.latest) + '.</p><div class="fun">' +
     keys.map(k => { const idx = ['f1', 'f2', 'f3', 'f4', 'f5'].indexOf(k); return row(FS[k] + ' <small>' + esc(ruleText(k)) + '</small>', cur.filter(r => r.e.checks[idx].st === 'pass')); }).join('') +
-    row('Lulus semua', cur.filter(r => r.e.all), 'all') + '</div></div>';
+    row(tx('Lulus semua', 'Pass all'), cur.filter(r => r.e.all), 'all') + '</div></div>';
 }
 function moversHTML() {
   let rows = RES.rows.filter(r => r.cur).map(r => ({ r, ch: dayChg(r.p) })).filter(o => o.ch != null).sort((a, b) => b.ch - a.ch);
@@ -696,8 +740,8 @@ function moversHTML() {
   const total = rows.length; if (rows.length > 12) rows = rows.slice(0, 6).concat(rows.slice(-6));
   const mx = Math.max(...rows.map(o => Math.abs(o.ch))) || 1;
   const up = RES.rows.filter(r => r.cur && dayChg(r.p) > 0).length, dn = RES.rows.filter(r => r.cur && dayChg(r.p) < 0).length;
-  return '<div class="vcard"><h3>Pergerakan harga ' + fmtDate(RES.latest) + '</h3><p class="sub num">' + up + ' naik, ' + dn + ' turun, ' + (total - up - dn) + ' tidak berubah' + (total > 12 ? '. Menunjukkan 6 teratas dan 6 terbawah.' : '.') + '</p>' +
-    '<div class="mvhead"><span>← Turun</span><span>Naik →</span></div><div class="mv">' +
+  return '<div class="vcard"><h3>' + tx('Pergerakan harga ', 'Price moves, ') + fmtDate(RES.latest) + '</h3><p class="sub num">' + up + tx(' naik, ', ' up, ') + dn + tx(' turun, ', ' down, ') + (total - up - dn) + tx(' tidak berubah', ' unchanged') + (total > 12 ? tx('. Menunjukkan 6 teratas dan 6 terbawah.', '. Showing the top 6 and bottom 6.') : '.') + '</p>' +
+    '<div class="mvhead"><span>' + tx('← Turun', '← Down') + '</span><span>' + tx('Naik →', 'Up →') + '</span></div><div class="mv">' +
     rows.map(({ r, ch }) => { const w = Math.abs(ch) / mx * 50;
       return '<div class="lb" title="' + esc(NAMES[r.s] || r.s) + '"><b>' + esc(r.s) + '</b>' + (NAMES[r.s] ? ' <small style="color:var(--muted)">' + esc(NAMES[r.s]) + '</small>' : '') + '</div>' +
         '<div class="mvbar" role="img" aria-label="' + esc(r.s) + ' ' + fmtPct(ch) + '"><i class="' + (ch >= 0 ? 'pos' : 'neg') + '" style="width:' + w.toFixed(1) + '%"></i></div>' +
@@ -706,38 +750,38 @@ function moversHTML() {
 function detailHTML(r) {
   const f5 = r.e.checks[4];
   return '<div class="detail">' + chartHTML(r) + r.e.checks.map(ch => { const [c, t] = markText(ch); return '<div class="chk"><span class="nm">' + FN[ch.k] + '<span class="rule">' + esc(ruleText(ch.k)) + '</span></span><span class="val num">' + esc(valText(ch)) + '</span><span class="mk ' + c + '">' + t + '</span></div>'; }).join('') +
-    (f5.up != null ? '<p class="levels num">Jalur atas RM ' + fmtPx(f5.up) + ', jalur tengah (SMA20) RM ' + fmtPx(f5.mid) + '. Volum hari ini ' + fmtBig(r.p.v[r.p.v.length - 1]) + ' unit.' + (S.shares[r.s] ? ' Saham beredar ' + fmtBig(S.shares[r.s]) + '.' : ' Tambah jumlah saham beredar di tab Data.') + '</p>' : '') + '</div>';
+    (f5.up != null ? '<p class="levels num">' + tx('Jalur atas', 'Upper band') + ' RM ' + fmtPx(f5.up) + tx(', jalur tengah (SMA20) RM ', ', middle band (SMA20) RM ') + fmtPx(f5.mid) + tx('. Volum hari ini ', ". Today's volume ") + fmtBig(r.p.v[r.p.v.length - 1]) + tx(' unit.', ' units.') + (S.shares[r.s] ? tx(' Saham beredar ', ' Shares outstanding ') + fmtBig(S.shares[r.s]) + '.' : tx(' Tambah jumlah saham beredar di tab Data.', ' Add shares outstanding in the Data tab.')) + '</p>' : '') + '</div>';
 }
 function rowHTML(r) {
   const w = !!S.watch[r.s];
   return '<details class="row"><summary><div class="symline"><div><span class="sym">' + esc(r.s) + cname(r.s) + '</span>' + pxLine(r) + '</div>' + spark(r) + '</div>' + lamps(r.e) +
-    '<button class="btn' + (w ? ' on' : '') + '" data-act="watch" data-sym="' + esc(r.s) + '" aria-pressed="' + w + '">' + (w ? 'Dipantau' : 'Pantau') + '</button></summary>' + detailHTML(r) + '</details>';
+    '<button class="btn' + (w ? ' on' : '') + '" data-act="watch" data-sym="' + esc(r.s) + '" aria-pressed="' + w + '">' + (w ? tx('Dipantau', 'Watching') : tx('Pantau', 'Watch')) + '</button></summary>' + detailHTML(r) + '</details>';
 }
 function renderSaringan() {
   const el = $('#saringan');
   if (!RES || !RES.rows.length) {
-    el.innerHTML = '<div class="empty"><strong>Belum ada data harga</strong>Masukkan data harian di tab Data, atau cuba data contoh untuk lihat cara app ini berfungsi.<div class="actions"><button class="btn primary" data-act="goto" data-tab="data">Masukkan data</button><button class="btn" data-act="demo">Cuba data contoh</button></div></div>';
+    el.innerHTML = '<div class="empty"><strong>' + tx('Belum ada data harga', 'No price data yet') + '</strong>' + tx('Masukkan data harian di tab Data, atau cuba data contoh untuk lihat cara app ini berfungsi.', 'Add daily data in the Data tab, or try the sample data to see how the app works.') + '<div class="actions"><button class="btn primary" data-act="goto" data-tab="data">' + tx('Masukkan data', 'Add data') + '</button><button class="btn" data-act="demo">' + tx('Cuba data contoh', 'Try sample data') + '</button></div></div>';
     return;
   }
   const g = groups(); const onN = Object.values(S.filters).filter(f => f.on).length;
-  const allWord = onN === 5 ? 'kelima-lima penapis' : 'semua ' + onN + ' penapis aktif';
+  const allWord = onN === 5 ? tx('kelima-lima penapis', 'all five filters') : tx('semua ' + onN + ' penapis aktif', 'all ' + onN + ' active filters');
   const cur = RES.rows.length - RES.stale;
   const V = VIEW || 'semua';
   let list = V === 'lulus' ? g.lulus : V === 'hampir' ? g.hampir : g.semua;
   const q = QUERY.trim().toUpperCase(); if (q) list = list.filter(r => r.s.includes(q));
   const shown = list.slice(0, LIMIT);
-  const emptyMsg = q ? 'Tiada simbol sepadan dengan “' + esc(QUERY.trim()) + '”.' : V === 'lulus' ? 'Tiada saham lulus ' + allWord + ' untuk ' + fmtDate(RES.latest) + '. Semak senarai hampir lulus.' : V === 'hampir' ? 'Tiada saham yang kurang satu penapis sahaja.' : 'Tiada data.';
+  const emptyMsg = q ? tx('Tiada simbol sepadan dengan “', 'No symbol matches “') + esc(QUERY.trim()) + '”.' : V === 'lulus' ? tx('Tiada saham lulus ' + allWord + ' untuk ', 'No stocks pass ' + allWord + ' on ') + fmtDate(RES.latest) + tx('. Semak senarai hampir lulus.', '. Check the near-pass list.') : V === 'hampir' ? tx('Tiada saham yang kurang satu penapis sahaja.', 'No stocks are just one filter short.') : tx('Tiada data.', 'No data.');
   el.innerHTML =
-    '<div class="hero"><h2 class="num">' + (g.lulus.length ? g.lulus.length + ' saham lulus ' + allWord : 'Tiada saham lulus ' + allWord) + '</h2>' +
-    '<p>Data ' + fmtDate(RES.latest) + '. ' + cur + ' kaunter disaring' + (RES.stale ? ', ' + RES.stale + ' tiada data untuk tarikh ini' : '') + '.</p></div>' + noticeHTML() +
-    (q ? '' : '<h2 class="vh">Ringkasan pasaran</h2><div class="viz">' + funnelHTML() + moversHTML() + '</div>') +
-    '<div class="seg" role="group" aria-label="Senarai">' +
-    [['semua', 'Semua', g.semua.length], ['lulus', 'Lulus semua', g.lulus.length], ['hampir', 'Hampir lulus', g.hampir.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
-    '<input class="search" id="q" type="search" placeholder="Cari simbol" aria-label="Cari simbol" value="' + esc(QUERY) + '">' +
-    '<p class="legend">Vol = volum harian, 5H = harga 5 hari, V10 = purata volum 10 hari, RSI = RSI 14 hari, BB = Bollinger breakout. Tekan baris untuk lihat carta dan nilai.</p>' +
+    '<div class="hero"><h2 class="num">' + (g.lulus.length ? g.lulus.length + tx(' saham lulus ', (g.lulus.length === 1 ? ' stock passes ' : ' stocks pass ')) + allWord : tx('Tiada saham lulus ', 'No stocks pass ') + allWord) + '</h2>' +
+    '<p>' + tx('Data ', 'Data for ') + fmtDate(RES.latest) + '. ' + cur + tx(' kaunter disaring', ' counters screened') + (RES.stale ? ', ' + RES.stale + tx(' tiada data untuk tarikh ini', ' have no data for this date') : '') + '.</p></div>' + noticeHTML() +
+    (q ? '' : '<h2 class="vh">' + tx('Ringkasan pasaran', 'Market summary') + '</h2><div class="viz">' + funnelHTML() + moversHTML() + '</div>') +
+    '<div class="seg" role="group" aria-label="' + tx('Senarai', 'List') + '">' +
+    [['semua', tx('Semua', 'All'), g.semua.length], ['lulus', tx('Lulus semua', 'Pass all'), g.lulus.length], ['hampir', tx('Hampir lulus', 'Near pass'), g.hampir.length]].map(([k, t, n]) => '<button data-act="view" data-view="' + k + '" aria-pressed="' + (V === k) + '">' + t + ' <span class="num">' + n + '</span></button>').join('') + '</div>' +
+    '<input class="search" id="q" type="search" placeholder="' + tx('Cari simbol', 'Search symbol') + '" aria-label="' + tx('Cari simbol', 'Search symbol') + '" value="' + esc(QUERY) + '">' +
+    '<p class="legend">' + tx('Vol = volum harian, 5H = harga 5 hari, V10 = purata volum 10 hari, RSI = RSI 14 hari, BB = Bollinger breakout. Tekan baris untuk lihat carta dan nilai.', 'Vol = daily volume, 5D = 5-day price, V10 = 10-day average volume, RSI = 14-day RSI, BB = Bollinger breakout. Tap a row to see the chart and values.') + '</p>' +
     (shown.length ? '<div class="list">' + shown.map(rowHTML).join('') + '</div>' : '<div class="empty">' + emptyMsg + '</div>') +
-    (list.length > LIMIT ? '<button class="btn more" data-act="more">Tunjuk lagi (' + (list.length - LIMIT) + ' baki)</button>' : '') +
-    '<p class="note">Alat analisis teknikal sahaja, bukan nasihat pelaburan. Lulus semua penapis tidak menjamin harga akan naik.</p>';
+    (list.length > LIMIT ? '<button class="btn more" data-act="more">' + tx('Tunjuk lagi (', 'Show more (') + (list.length - LIMIT) + tx(' baki)', ' left)') + '</button>' : '') +
+    '<p class="note">' + tx('Alat analisis teknikal sahaja, bukan nasihat pelaburan. Lulus semua penapis tidak menjamin harga akan naik.', 'A technical analysis tool only, not investment advice. Passing all filters does not guarantee the price will rise.') + '</p>';
 }
 function history(r, days) {
   const n = r.p.c.length, out = [];
@@ -751,7 +795,7 @@ function renderPantauan() {
   const el = $('#pantauan'); const syms = Object.keys(S.watch);
   let ready = 0;
   if (!syms.length) {
-    el.innerHTML = '<div class="empty"><strong>Belum ada saham dipantau</strong>Tekan “Pantau” pada mana-mana saham di tab Saringan. Setiap hari selepas data baharu dimasukkan, status saham di sini dikemas kini.</div>';
+    el.innerHTML = '<div class="empty"><strong>' + tx('Belum ada saham dipantau', 'No stocks on your watchlist yet') + '</strong>' + tx('Tekan “Pantau” pada mana-mana saham di tab Saringan. Setiap hari selepas data baharu dimasukkan, status saham di sini dikemas kini.', 'Tap “Watch” on any stock in the Screener tab. Each day after new data arrives, the status here is updated.') + '</div>';
     $('#wbadge').textContent = ''; return;
   }
   const items = syms.map(s => {
@@ -761,34 +805,34 @@ function renderPantauan() {
   }).sort((a, b) => a.rank - b.rank || a.s.localeCompare(b.s));
   const cards = items.map(({ s, r, go }) => {
     const w = S.watch[s];
-    if (!r) return '<div class="card"><div class="card-h"><span class="sym">' + esc(s) + '</span><span class="chip stale">Tiada data</span></div><p class="meta">Masukkan data harga untuk simbol ini.</p><div class="card-f"><button class="btn" data-act="unwatch" data-sym="' + esc(s) + '">Buang</button></div></div>';
+    if (!r) return '<div class="card"><div class="card-h"><span class="sym">' + esc(s) + '</span><span class="chip stale">' + tx('Tiada data', 'No data') + '</span></div><p class="meta">' + tx('Masukkan data harga untuk simbol ini.', 'Add price data for this symbol.') + '</p><div class="card-f"><button class="btn" data-act="unwatch" data-sym="' + esc(s) + '">' + tx('Buang', 'Remove') + '</button></div></div>';
     const n = r.p.c.length, last = r.p.c[n - 1];
     const since = w.price ? (last / w.price - 1) * 100 : null;
     const missing = r.e.checks.filter(ch => ch.on && ch.st !== 'pass');
-    const chip = !r.cur ? '<span class="chip stale">Tiada data ' + fmtDate(RES.latest) + '</span>' : go ? '<span class="chip go">MASUK</span>' : '<span class="chip wait">Tunggu: kurang ' + missing.length + ' penapis</span>';
+    const chip = !r.cur ? '<span class="chip stale">' + tx('Tiada data ', 'No data for ') + fmtDate(RES.latest) + '</span>' : go ? '<span class="chip go">' + tx('MASUK', 'ENTRY') + '</span>' : '<span class="chip wait">' + tx('Tunggu: kurang ' + missing.length + ' penapis', 'Wait: ' + missing.length + (missing.length === 1 ? ' filter' : ' filters') + ' short') + '</span>';
     const hist = history(r, 10); let streak = 0; for (let i = hist.length - 1; i >= 0 && hist[i].st === 'ok'; i--) streak++;
     const prevOk = hist.slice(0, -1).reverse().find(h => h.st === 'ok');
     return '<div class="card' + (go ? ' go' : '') + '"><div class="card-h"><span class="sym">' + esc(s) + '</span>' + chip + '</div>' +
-      '<p class="meta num">RM ' + fmtPx(last) + (since == null ? '' : ', ' + fmtPct(since) + ' sejak dipantau pada ' + fmtDate(w.added)) + '</p>' + lamps(r.e) +
-      (missing.length && r.cur ? '<p class="miss">Belum lulus: ' + missing.map(ch => FS[ch.k] + ' (' + esc(valText(ch)) + ')').join(', ') + '</p>' : '') +
-      (go ? '<p class="miss">' + (streak > 1 ? 'Lulus semua penapis ' + streak + ' sesi berturut-turut.' : (prevOk ? 'Lulus semula hari ini. Kali terakhir lulus: ' + fmtDate(prevOk.d) + '.' : 'Kali pertama lulus semua penapis dalam ' + hist.length + ' sesi terakhir.')) + ' Jalur tengah BB: RM ' + fmtPx(r.e.checks[4].mid) + '.</p>' : '') +
-      '<div class="hist"><span>' + hist.length + ' sesi lepas</span><span class="dots" role="img" aria-label="Status ' + hist.length + ' sesi lepas">' + hist.map(h => '<span class="' + h.st + '" title="' + fmtDate(h.d) + '"></span>').join('') + '</span><span>' + fmtDate(hist[0].d) + ' hingga ' + fmtDate(hist[hist.length - 1].d) + '</span></div>' +
-      '<div class="card-f"><button class="btn" data-act="unwatch" data-sym="' + esc(s) + '">Buang</button></div></div>';
+      '<p class="meta num">RM ' + fmtPx(last) + (since == null ? '' : ', ' + fmtPct(since) + tx(' sejak dipantau pada ', ' since watched on ') + fmtDate(w.added)) + '</p>' + lamps(r.e) +
+      (missing.length && r.cur ? '<p class="miss">' + tx('Belum lulus: ', 'Not passing yet: ') + missing.map(ch => FS[ch.k] + ' (' + esc(valText(ch)) + ')').join(', ') + '</p>' : '') +
+      (go ? '<p class="miss">' + (streak > 1 ? tx('Lulus semua penapis ' + streak + ' sesi berturut-turut.', 'Passed all filters ' + streak + ' sessions in a row.') : (prevOk ? tx('Lulus semula hari ini. Kali terakhir lulus: ', 'Passing again today. Last passed: ') + fmtDate(prevOk.d) + '.' : tx('Kali pertama lulus semua penapis dalam ' + hist.length + ' sesi terakhir.', 'First time passing all filters in the last ' + hist.length + ' sessions.'))) + tx(' Jalur tengah BB: RM ', ' BB middle band: RM ') + fmtPx(r.e.checks[4].mid) + '.</p>' : '') +
+      '<div class="hist"><span>' + hist.length + tx(' sesi lepas', ' past sessions') + '</span><span class="dots" role="img" aria-label="' + tx('Status ' + hist.length + ' sesi lepas', 'Status of the past ' + hist.length + ' sessions') + '">' + hist.map(h => '<span class="' + h.st + '" title="' + fmtDate(h.d) + '"></span>').join('') + '</span><span>' + fmtDate(hist[0].d) + tx(' hingga ', ' to ') + fmtDate(hist[hist.length - 1].d) + '</span></div>' +
+      '<div class="card-f"><button class="btn" data-act="unwatch" data-sym="' + esc(s) + '">' + tx('Buang', 'Remove') + '</button></div></div>';
   }).join('');
-  el.innerHTML = '<div class="hero"><h2 class="num">' + (ready ? ready + ' daripada ' + syms.length + ' saham pantauan sedia MASUK' : 'Belum ada saham pantauan yang lulus semua penapis') + '</h2>' +
-    '<p>' + (RES && RES.latest ? 'Berdasarkan data ' + fmtDate(RES.latest) + '. ' : '') + 'Kotak hijau = lulus semua, kuning = kurang satu penapis.</p></div><div class="list">' + cards + '</div>' +
-    '<p class="note">MASUK bermaksud semua penapis teknikal lulus pada data terkini. Ia bukan nasihat pelaburan.</p>';
+  el.innerHTML = '<div class="hero"><h2 class="num">' + (ready ? ready + tx(' daripada ', ' of ') + syms.length + tx(' saham pantauan sedia MASUK', ' watched stocks ready for ENTRY') : tx('Belum ada saham pantauan yang lulus semua penapis', 'No watched stock passes all filters yet')) + '</h2>' +
+    '<p>' + (RES && RES.latest ? tx('Berdasarkan data ', 'Based on data for ') + fmtDate(RES.latest) + '. ' : '') + tx('Kotak hijau = lulus semua, kuning = kurang satu penapis.', 'Green box = passes all, yellow = one filter short.') + '</p></div><div class="list">' + cards + '</div>' +
+    '<p class="note">' + tx('MASUK bermaksud semua penapis teknikal lulus pada data terkini. Ia bukan nasihat pelaburan.', 'ENTRY means all technical filters pass on the latest data. It is not investment advice.') + '</p>';
   $('#wbadge').textContent = ready ? String(ready) : '';
 }
 function renderDataSummary() {
   const el = $('#dataSummary'); const syms = Object.keys(S.prices);
-  if (!syms.length) { el.innerHTML = '<p class="lead">Belum ada data.</p>'; return; }
+  if (!syms.length) { el.innerHTML = '<p class="lead">' + tx('Belum ada data.', 'No data yet.') + '</p>'; return; }
   const lens = syms.map(s => S.prices[s].d.length).sort((a, b) => a - b); const med = lens[Math.floor(lens.length / 2)];
   const noSh = syms.filter(s => !(S.shares[s] > 0)).sort();
   const short = lens.filter(x => x < 21).length;
-  el.innerHTML = '<div class="stats num"><div class="stat"><b>' + syms.length + '</b><span>kaunter</span></div><div class="stat"><b>' + fmtDate(RES.latest) + '</b><span>tarikh terkini</span></div><div class="stat"><b>' + med + '</b><span>hari sejarah (median)</span></div><div class="stat"><b>' + noSh.length + '</b><span>tanpa jumlah saham</span></div></div>' +
-    (noSh.length ? '<p class="lead" style="margin-top:10px">Saham tanpa jumlah saham beredar tidak boleh lulus penapis Vol' + (S.filters.f3.mode === 'pct' ? ' dan V10' : '') + ': ' + noSh.slice(0, 12).map(esc).join(', ') + (noSh.length > 12 ? ' dan ' + (noSh.length - 12) + ' lagi' : '') + '.</p>' : '') +
-    (short ? '<p class="lead">' + short + ' kaunter ada kurang daripada 21 hari data. Bollinger perlukan 20 hari, jadi masukkan data sejarah sekurang-kurangnya sebulan untuk keputusan yang tepat.</p>' : '');
+  el.innerHTML = '<div class="stats num"><div class="stat"><b>' + syms.length + '</b><span>' + tx('kaunter', 'counters') + '</span></div><div class="stat"><b>' + fmtDate(RES.latest) + '</b><span>' + tx('tarikh terkini', 'latest date') + '</span></div><div class="stat"><b>' + med + '</b><span>' + tx('hari sejarah (median)', 'days of history (median)') + '</span></div><div class="stat"><b>' + noSh.length + '</b><span>' + tx('tanpa jumlah saham', 'without shares outstanding') + '</span></div></div>' +
+    (noSh.length ? '<p class="lead" style="margin-top:10px">' + tx('Saham tanpa jumlah saham beredar tidak boleh lulus penapis Vol', 'Stocks without shares outstanding cannot pass the Vol filter') + (S.filters.f3.mode === 'pct' ? tx(' dan V10', ' or V10') : '') + ': ' + noSh.slice(0, 12).map(esc).join(', ') + (noSh.length > 12 ? tx(' dan ', ' and ') + (noSh.length - 12) + tx(' lagi', ' more') : '') + '.</p>' : '') +
+    (short ? '<p class="lead">' + short + tx(' kaunter ada kurang daripada 21 hari data. Bollinger perlukan 20 hari, jadi masukkan data sejarah sekurang-kurangnya sebulan untuk keputusan yang tepat.', ' counters have fewer than 21 days of data. Bollinger needs 20 days, so add at least a month of history for accurate results.') + '</p>' : '');
 }
 function fieldNum(k, key, label, ph) {
   const v = S.filters[k][key];
@@ -796,17 +840,17 @@ function fieldNum(k, key, label, ph) {
 }
 function renderTetapan() {
   const F = S.filters;
-  $('#tetapan').innerHTML = '<h2 class="sec">Penapis</h2><p class="lead">Saham dilabel MASUK bila semua penapis yang aktif lulus serentak. Kosongkan Maksimum untuk tiada had atas.</p>' +
+  $('#tetapan').innerHTML = '<h2 class="sec">' + tx('Penapis', 'Filters') + '</h2><p class="lead">' + tx('Saham dilabel MASUK bila semua penapis yang aktif lulus serentak. Kosongkan Maksimum untuk tiada had atas.', 'A stock is labelled ENTRY when all active filters pass at the same time. Leave Maximum empty for no upper limit.') + '</p>' +
     ['f1', 'f2', 'f3', 'f4', 'f5'].map(k => {
       let fields = '';
-      if (k === 'f5') fields = '<label class="inline"><input type="checkbox" data-f="f5" data-key="fresh"' + (F.f5.fresh ? ' checked' : '') + '> Pecah baharu sahaja (hari pertama tutup atas jalur)</label>';
+      if (k === 'f5') fields = '<label class="inline"><input type="checkbox" data-f="f5" data-key="fresh"' + (F.f5.fresh ? ' checked' : '') + '> ' + tx('Pecah baharu sahaja (hari pertama tutup atas jalur)', 'New breakouts only (first day closing above the band)') + '</label>';
       else {
-        fields = fieldNum(k, 'min', 'Minimum' + (unit(k).trim() ? ' (' + unit(k).trim() + ')' : '')) + fieldNum(k, 'max', 'Maksimum', 'Tiada had');
-        if (k === 'f3') fields = '<label class="wide">Cara kira<select data-f="f3" data-key="mode">' + Object.entries(F3MODES).map(([m, t]) => '<option value="' + m + '"' + (F.f3.mode === m ? ' selected' : '') + '>' + t + '</option>').join('') + '</select></label>' + fields;
+        fields = fieldNum(k, 'min', 'Minimum' + (unit(k).trim() ? ' (' + unit(k).trim() + ')' : '')) + fieldNum(k, 'max', tx('Maksimum', 'Maximum'), tx('Tiada had', 'No limit'));
+        if (k === 'f3') fields = '<label class="wide">' + tx('Cara kira', 'Method') + '<select data-f="f3" data-key="mode">' + Object.entries(F3MODES).map(([m, t]) => '<option value="' + m + '"' + (F.f3.mode === m ? ' selected' : '') + '>' + t + '</option>').join('') + '</select></label>' + fields;
       }
-      return '<div class="fcard' + (F[k].on ? '' : ' dis') + '"><label class="fhead"><input type="checkbox" data-f="' + k + '" data-key="on"' + (F[k].on ? ' checked' : '') + '>' + FN[k] + '</label><p class="fdesc">' + FD[k] + (k === 'f3' ? ' Pastikan cara kira sama dengan sumber penapis anda.' : '') + (k === 'f4' ? ' Bacaan atas 70 selalunya dianggap terlebih beli.' : '') + '</p><div class="fields">' + fields + '</div></div>';
+      return '<div class="fcard' + (F[k].on ? '' : ' dis') + '"><label class="fhead"><input type="checkbox" data-f="' + k + '" data-key="on"' + (F[k].on ? ' checked' : '') + '>' + FN[k] + '</label><p class="fdesc">' + FD[k] + (k === 'f3' ? tx(' Pastikan cara kira sama dengan sumber penapis anda.', ' Make sure the method matches your screener source.') : '') + (k === 'f4' ? tx(' Bacaan atas 70 selalunya dianggap terlebih beli.', ' A reading above 70 is often considered overbought.') : '') + '</p><div class="fields">' + fields + '</div></div>';
     }).join('') +
-    '<div class="actions"><button class="btn" data-act="reset">Pulihkan nilai asal</button></div>';
+    '<div class="actions"><button class="btn" data-act="reset">' + tx('Pulihkan nilai asal', 'Restore defaults') + '</button></div>';
 }
 function renderTabs() {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === TAB)));
@@ -819,14 +863,14 @@ function renderScreens() { renderSaringan(); renderPantauan(); renderDataSummary
 function setTab(t) { TAB = t; LS.set('pb_tab', t); renderTabs(); window.scrollTo(0, 0); }
 function doImport(text, label) {
   const msg = $('#importMsg'); msg.className = 'msg';
-  if (!String(text).trim()) { msg.className = 'msg err'; msg.textContent = 'Tiada data. Tampal baris CSV atau pilih fail.'; return false; }
+  if (!String(text).trim()) { msg.className = 'msg err'; msg.textContent = tx('Tiada data. Tampal baris CSV atau pilih fail.', 'No data. Paste CSV rows or choose a file.'); return false; }
   const r = parseInput(text, S);
-  if (!r.priceRows && !r.shareRows) { msg.className = 'msg err'; msg.textContent = 'Tiada baris yang sah. Semak format: simbol,tarikh,open,high,low,close,volume' + (r.bad.length ? ' (baris ' + r.bad.join(', ') + ')' : '') + '.'; return false; }
+  if (!r.priceRows && !r.shareRows) { msg.className = 'msg err'; msg.textContent = tx('Tiada baris yang sah. Semak format: ', 'No valid rows. Check the format: ') + 'simbol,tarikh,open,high,low,close,volume' + (r.bad.length ? tx(' (baris ', ' (row ') + r.bad.join(', ') + ')' : '') + '.'; return false; }
   if (r.touched.length) markSyms(r.touched);
   if (r.sharesTouched.length) markMain();
   recompute(); renderScreens();
   msg.className = 'msg ok';
-  msg.textContent = (label ? label + ': ' : '') + (r.priceRows ? r.priceRows + ' baris harga untuk ' + r.touched.length + ' kaunter dimasukkan. ' : '') + (r.shareRows ? r.shareRows + ' jumlah saham beredar disimpan. ' : '') + (r.skipped ? r.skipped + ' baris dilangkau (baris ' + r.bad.join(', ') + (r.skipped > r.bad.length ? ', …' : '') + ').' : '');
+  msg.textContent = (label ? label + ': ' : '') + (r.priceRows ? r.priceRows + tx(' baris harga untuk ', ' price rows for ') + r.touched.length + tx(' kaunter dimasukkan. ', ' counters added. ') : '') + (r.shareRows ? r.shareRows + tx(' jumlah saham beredar disimpan. ', ' shares-outstanding values saved. ') : '') + (r.skipped ? r.skipped + tx(' baris dilangkau (baris ', ' rows skipped (rows ') + r.bad.join(', ') + (r.skipped > r.bad.length ? ', …' : '') + ').' : '');
   return true;
 }
 let clearArmed = null;
@@ -835,6 +879,7 @@ document.addEventListener('click', e => {
   if (t.matches('.tabs button')) { setTab(t.dataset.tab); return; }
   const act = t.dataset.act;
   if (act === 'theme') { setTheme(t.dataset.val); return; }
+  if (act === 'lang') { setLang(t.dataset.val); recompute(); renderAll(); renderFeedInfo(); renderStatus(); return; }
   if (act === 'goto') setTab(t.dataset.tab);
   else if (act === 'view') { VIEW = t.dataset.view; LIMIT = 150; renderSaringan(); }
   else if (act === 'more') { LIMIT += 150; renderSaringan(); }
@@ -843,24 +888,24 @@ document.addEventListener('click', e => {
     if (S.watch[s]) delete S.watch[s];
     else { const r = RES.byS[s]; S.watch[s] = { added: r ? r.p.d[r.p.d.length - 1] : RES.latest, price: r ? r.p.c[r.p.c.length - 1] : null }; }
     markMain();
-    if (act === 'watch') { const on = !!S.watch[s]; t.classList.toggle('on', on); t.textContent = on ? 'Dipantau' : 'Pantau'; t.setAttribute('aria-pressed', String(on)); renderPantauan(); }
+    if (act === 'watch') { const on = !!S.watch[s]; t.classList.toggle('on', on); t.textContent = on ? tx('Dipantau', 'Watching') : tx('Pantau', 'Watch'); t.setAttribute('aria-pressed', String(on)); renderPantauan(); }
     else renderScreens();
   }
   else if (act === 'import') { if (doImport($('#csv').value)) $('#csv').value = ''; }
   else if (act === 'demo') {
-    const ok = doImport(demoCSV(new Date()), 'Data contoh');
+    const ok = doImport(demoCSV(new Date()), tx('Data contoh', 'Sample data'));
     if (ok) { for (const s of ['DEMO-A', 'DEMO-C']) if (!S.watch[s] && RES.byS[s]) { const p = RES.byS[s].p, i = p.d.length - 6; S.watch[s] = { added: p.d[i], price: p.c[i] }; } markMain(); renderPantauan(); VIEW = 'lulus'; renderSaringan(); setTab('saringan'); }
   }
   else if (act === 'clear') {
     if (clearArmed) {
-      clearTimeout(clearArmed); clearArmed = null; t.classList.remove('arm'); t.textContent = 'Padam data dalam pelayar ini';
+      clearTimeout(clearArmed); clearArmed = null; t.classList.remove('arm'); t.textContent = tx('Padam data dalam pelayar ini', 'Delete data in this browser');
       const bks = new Set(usedBuckets); for (const s in S.prices) bks.add(bucketOf(s));
       S.prices = {}; S.shares = {}; S.watch = {};
       bks.forEach(k => dirtyB.add(k)); markMain(); saveLocalPx(); recompute(); renderScreens();
-      $('#importMsg').className = 'msg ok'; $('#importMsg').textContent = 'Data dalam pelayar ini dipadam. Muat semula halaman untuk dapatkan data automatik semula. Tetapan penapis dikekalkan.';
+      $('#importMsg').className = 'msg ok'; $('#importMsg').textContent = tx('Data dalam pelayar ini dipadam. Muat semula halaman untuk dapatkan data automatik semula. Tetapan penapis dikekalkan.', 'Data in this browser was deleted. Reload the page to get the automatic data again. Filter settings are kept.');
     } else {
-      t.classList.add('arm'); t.textContent = 'Tekan sekali lagi untuk padam';
-      clearArmed = setTimeout(() => { clearArmed = null; t.classList.remove('arm'); t.textContent = 'Padam data dalam pelayar ini'; }, 4000);
+      t.classList.add('arm'); t.textContent = tx('Tekan sekali lagi untuk padam', 'Tap again to delete');
+      clearArmed = setTimeout(() => { clearArmed = null; t.classList.remove('arm'); t.textContent = tx('Padam data dalam pelayar ini', 'Delete data in this browser'); }, 4000);
     }
   }
   else if (act === 'reset') { S.filters = DEF_FILTERS(); markMain(); recompute(); renderTetapan(); renderScreens(); }
@@ -878,7 +923,7 @@ document.addEventListener('change', e => {
     const f = t.files && t.files[0]; if (!f) return;
     const rd = new FileReader();
     rd.onload = () => { doImport(String(rd.result || ''), f.name); t.value = ''; };
-    rd.onerror = () => { $('#importMsg').className = 'msg err'; $('#importMsg').textContent = 'Fail tidak dapat dibaca. Cuba simpan semula sebagai CSV.'; };
+    rd.onerror = () => { $('#importMsg').className = 'msg err'; $('#importMsg').textContent = tx('Fail tidak dapat dibaca. Cuba simpan semula sebagai CSV.', 'The file could not be read. Try saving it again as CSV.'); };
     rd.readAsText(f); return;
   }
   const k = t.dataset && t.dataset.f; if (!k) return; const key = t.dataset.key; const F = S.filters[k];
@@ -900,6 +945,7 @@ loadLocal();
 TAB = LS.get('pb_tab') || 'saringan';
 if (!['saringan', 'pantauan', 'data', 'tetapan'].includes(TAB)) TAB = 'saringan';
 setTheme(document.documentElement.getAttribute('data-theme'));
+setLang(LANG);
 recompute(); renderAll();
 loadFeed();
 </script>
